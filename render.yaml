@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: flowguard-api
+    runtime: node
+    rootDir: backend
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start:api
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: MONGODB_DATABASE
+        value: flowguard
+      - key: APPROVAL_TIMEOUT_SECONDS
+        value: "60"
+      - key: WORKER_POLL_MS
+        value: "1500"
+      - key: MAX_RETRY_ATTEMPTS
+        value: "3"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+  - type: worker
+    name: flowguard-worker
+    runtime: node
+    rootDir: backend
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start:worker
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: MONGODB_DATABASE
+        value: flowguard
+      - key: APPROVAL_TIMEOUT_SECONDS
+        value: "60"
+      - key: WORKER_POLL_MS
+        value: "1500"
+      - key: MAX_RETRY_ATTEMPTS
+        value: "3"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
