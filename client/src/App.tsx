@@ -1,3 +1,4 @@
+/** FlowGuard Calm Operations Console: system-aware theme selection supports focused work across different operating environments. */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -48,6 +49,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
+        switchable
       >
         <TooltipProvider>
           <AuthProvider>

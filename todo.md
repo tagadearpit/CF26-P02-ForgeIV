@@ -67,3 +67,9 @@
 
 - [x] Review loading, refresh, and decision surfaces for high-value state-feedback motion.
 - [x] Add restrained workflow-status and action-feedback animation, then validate the production build.
+
+## Theme and README Quality Update
+
+- [x] Audit theme persistence, contrast, and the current README image/link failures.
+- [x] Add a professional dark-mode toggle and repair/improve README visuals and evaluation evidence.
+- [x] Validate theme behavior, documentation links, frontend build, checkpoint, and GitHub synchronization.

@@ -112,6 +112,15 @@
   --sidebar-ring: oklch(0.68 0.15 260);
 }
 
+/* FlowGuard Calm Operations Console: semantic dark-mode fallbacks keep dense evidence screens legible without altering workflow-state colors. */
+.dark .bg-white { background-color: oklch(0.22 0.02 260) !important; }
+.dark .bg-slate-50 { background-color: oklch(0.20 0.02 260) !important; }
+.dark .bg-slate-100 { background-color: oklch(0.25 0.02 260) !important; }
+.dark .border-slate-100, .dark .border-slate-200 { border-color: oklch(0.34 0.02 260) !important; }
+.dark .text-slate-900, .dark .text-slate-800 { color: oklch(0.94 0.006 258) !important; }
+.dark .text-slate-700, .dark .text-slate-600 { color: oklch(0.82 0.01 258) !important; }
+.dark .text-slate-500, .dark .text-slate-400 { color: oklch(0.70 0.02 258) !important; }
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { scroll-behavior: smooth; }
