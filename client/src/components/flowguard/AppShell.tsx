@@ -1,12 +1,13 @@
-/** FlowGuard Calm Operations Console: an anchored, theme-aware sidebar shell where restrained motion explains route changes and live state without decoration. */
-import { useState, type ReactNode } from "react";
-import { BarChart3, Bell, ChevronDown, CircleHelp, Command, LayoutDashboard, ListChecks, Moon, Plus, ShieldCheck, Sun, Split } from "lucide-react";
+/** FlowGuard Calm Operations Console: a theme-aware sidebar shell with a concise account menu for role clarity, appearance control, and safe exit. */
+import { type ReactNode } from "react";
+import { BarChart3, Bell, CircleHelp, Command, LayoutDashboard, ListChecks, LogOut, Moon, Palette, Plus, ShieldCheck, Sun, UserRound, Split } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const navigation = [
   { href: "/", label: "Control room", icon: LayoutDashboard },
@@ -19,10 +20,9 @@ const navigation = [
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { auth, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [profileOpen, setProfileOpen] = useState(false);
   return <SidebarProvider defaultOpen>
     <Sidebar variant="inset" collapsible="icon" className="border-r border-slate-200/70 bg-[#FBFCFE] dark:border-slate-800 dark:bg-slate-950">
       <SidebarHeader className="p-4 pb-3">
@@ -46,11 +46,22 @@ export function AppShell({ children }: { children: ReactNode }) {
         </Link>
       </SidebarContent>
       <SidebarFooter className="p-3">
-        <button onClick={() => setProfileOpen(value => !value)} className="fg-interactive flex w-full items-center gap-2 rounded-lg p-2 text-left hover:bg-slate-100 dark:hover:bg-slate-900">
-          <span className="flex size-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">{auth?.user.name?.split(" ").map(part => part[0]).join("")}</span>
-          <span className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden"><span className="block truncate text-xs font-bold text-slate-800">{auth?.user.name}</span><span className="block truncate text-[10px] font-medium text-slate-400">{auth?.user.role.toLowerCase()}</span></span><ChevronDown className="size-3.5 text-slate-400 group-data-[collapsible=icon]:hidden" />
-        </button>
-        {profileOpen && <div className="fg-surface-enter mt-1 rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-700 dark:bg-slate-900 group-data-[collapsible=icon]:hidden"><button onClick={signOut} className="fg-interactive w-full rounded-md px-2 py-1.5 text-left text-xs font-semibold text-rose-700 hover:bg-rose-50">Sign out</button></div>}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="fg-interactive flex w-full items-center gap-2 rounded-lg p-2 text-left hover:bg-slate-100 dark:hover:bg-slate-900" aria-label="Open account menu">
+              <span className="flex size-8 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">{auth?.user.name?.split(" ").map(part => part[0]).join("")}</span>
+              <span className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden"><span className="block truncate text-xs font-bold text-slate-800 dark:text-slate-100">{auth?.user.name}</span><span className="block truncate text-[10px] font-medium text-slate-400">{auth?.user.role.toLowerCase()}</span></span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" side="top" className="fg-surface-enter w-64 rounded-xl border-slate-200 bg-white p-2 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+            <DropdownMenuLabel className="px-2 py-2"><div className="flex items-center gap-2"><span className="flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"><UserRound className="size-4" /></span><span className="min-w-0"><span className="block truncate text-xs font-bold text-slate-800 dark:text-slate-100">{auth?.user.name}</span><span className="block truncate text-[10px] font-medium uppercase tracking-[0.12em] text-slate-400">{auth?.user.role} access</span></span></div></DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => toggleTheme?.()} className="rounded-lg py-2 text-xs font-semibold text-slate-700 dark:text-slate-200"><Palette className="size-4 text-blue-600 dark:text-blue-300" /><span>Appearance</span><span className="ml-auto text-[10px] font-medium text-slate-400">{theme === "dark" ? "Dark" : "Light"}</span></DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => navigate("/tour")} className="rounded-lg py-2 text-xs font-semibold text-slate-700 dark:text-slate-200"><CircleHelp className="size-4 text-slate-400" />Open judge tour</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={signOut} variant="destructive" className="rounded-lg py-2 text-xs font-semibold"><LogOut className="size-4" />Sign out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
     <SidebarInset className="min-h-svh bg-[#F5F7FB] dark:bg-slate-950">

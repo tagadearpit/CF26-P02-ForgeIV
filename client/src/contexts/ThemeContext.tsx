@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+/** FlowGuard Calm Operations Console: theme preference is persistent and changes through a short, reduced-motion-safe visual handoff. */
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
 type Theme = "light" | "dark";
 
@@ -21,6 +22,7 @@ export function ThemeProvider({
   defaultTheme = "light",
   switchable = false,
 }: ThemeProviderProps) {
+  const transitionTimer = useRef<number | null>(null);
   const [theme, setTheme] = useState<Theme>(() => {
     if (switchable) {
       const stored = localStorage.getItem("theme");
@@ -42,8 +44,16 @@ export function ThemeProvider({
     }
   }, [theme, switchable]);
 
+  useEffect(() => () => {
+    if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
+  }, []);
+
   const toggleTheme = switchable
     ? () => {
+        const root = document.documentElement;
+        root.classList.add("theme-transitioning");
+        if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
+        transitionTimer.current = window.setTimeout(() => root.classList.remove("theme-transitioning"), 260);
         setTheme(prev => (prev === "light" ? "dark" : "light"));
       }
     : undefined;

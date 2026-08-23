@@ -121,6 +121,17 @@
 .dark .text-slate-700, .dark .text-slate-600 { color: oklch(0.82 0.01 258) !important; }
 .dark .text-slate-500, .dark .text-slate-400 { color: oklch(0.70 0.02 258) !important; }
 
+/* Theme handoff is deliberately brief: it orients the eye without turning a productivity action into a visual effect. */
+html.theme-transitioning,
+html.theme-transitioning body,
+html.theme-transitioning [class*="bg-"],
+html.theme-transitioning [class*="text-"],
+html.theme-transitioning [class*="border-"] {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
+  transition-duration: 220ms !important;
+  transition-timing-function: var(--fg-ease-out) !important;
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { scroll-behavior: smooth; }
