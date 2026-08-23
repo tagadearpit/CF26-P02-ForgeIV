@@ -122,3 +122,8 @@
 - [x] Audit non-administrator workflow exposure and current administrator configuration.
 - [x] Restrict workflow data to its requester or an administrator, and seed one environment-configured second administrator.
 - [x] Add isolation and seeded-administrator tests, update Render configuration guidance, validate, checkpoint, and synchronize GitHub.
+
+## First-Time Workflow Empty State
+
+- [x] Add an illustrated, actionable first-time empty state for users with no submitted workflows.
+- [x] Validate the empty state, checkpoint, and synchronize GitHub.
