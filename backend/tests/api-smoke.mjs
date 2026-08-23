@@ -45,6 +45,14 @@ const admin = await login("admin@flowguard.demo");
 const manager = await login("manager@flowguard.demo");
 const operator = await login("operator@flowguard.demo");
 
+const registrationEmail = `new.requester.${suffix}@flowguard.demo`;
+const registered = await request("/api/auth/register", { method: "POST", body: JSON.stringify({ firstName: "New", surname: "Requester", email: registrationEmail, password: "SecureFlow!42", confirmPassword: "SecureFlow!42" }) });
+if (!registered.message.includes("Account created")) throw new Error("Registration did not return the expected sign-in instruction");
+const registeredAuth = await request("/api/auth/login", { method: "POST", body: JSON.stringify({ email: registrationEmail, password: "SecureFlow!42" }) });
+if (registeredAuth.user.role !== "REQUESTER" || registeredAuth.user.email !== registrationEmail) throw new Error("Registered user did not receive requester-level access");
+const duplicateRegistration = await fetch(`${base}/api/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ firstName: "New", surname: "Requester", email: registrationEmail, password: "SecureFlow!42", confirmPassword: "SecureFlow!42" }) });
+if (duplicateRegistration.status !== 409) throw new Error("Duplicate registration was not rejected by the API");
+
 const rejected = await start(admin.token, `SMOKE-REJECT-${suffix}`, `smoke-reject-${suffix}`);
 let waiting = await waitForStatus(admin.token, rejected.id, "WAITING_FOR_APPROVAL");
 await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "REJECT", comment: "Validate compensation path" }) }, manager.token);
@@ -77,7 +85,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "duplicate-email rejection", "rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

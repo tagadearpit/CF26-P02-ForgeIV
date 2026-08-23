@@ -88,3 +88,9 @@
 
 - [x] Review current page and navigation patterns for the dedicated ForgeVI mission and team page.
 - [x] Implement the About Us page, navigation entry, validation, checkpoint, and GitHub synchronization.
+
+## Secure Account Registration
+
+- [x] Audit existing user persistence, login route, password handling, validation, and deployment requirements.
+- [x] Add secure MongoDB-backed registration with duplicate-email protection and automated API coverage.
+- [x] Build the distinct account-creation page, login redirects, and validated end-to-end user journey.

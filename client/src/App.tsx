@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { lazy, Suspense } from "react";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -15,13 +15,15 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NewWorkflow from "./pages/NewWorkflow";
 import Recovery from "./pages/Recovery";
+import Register from "./pages/Register";
 
 const Analytics = lazy(() => import("./pages/Analytics"));
 const JudgeTour = lazy(() => import("./pages/JudgeTour"));
 
 function Router() {
   const { auth } = useAuth();
-  if (!auth) return <Login />;
+  const [location] = useLocation();
+  if (!auth) return location === "/register" ? <Register /> : <Login />;
   return (
     <Suspense fallback={<div className="flex min-h-svh items-center justify-center bg-slate-50 text-sm font-semibold text-slate-500">Loading FlowGuard workspace…</div>}>
     <Switch>
@@ -32,6 +34,7 @@ function Router() {
       <Route path={"/analytics"} component={Analytics} />
       <Route path={"/architecture"} component={Architecture} />
       <Route path={"/about"} component={About} />
+      <Route path={"/register"} component={Register} />
       <Route path={"/tour"} component={JudgeTour} />
       <Route path={"/executions/:id"} component={ExecutionDetail} />
       <Route path={"/404"} component={NotFound} />

@@ -4,13 +4,24 @@ import express, { type NextFunction, type Request, type Response } from "express
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { WorkflowEngine } from "./engine.js";
-import type { WorkflowStore } from "./store.js";
+import { newId, type WorkflowStore } from "./store.js";
 import type { FaultMode, Role, ServiceName } from "./types.js";
 
 type AuthUser = { id: string; role: Role; email: string; name: string };
 type AuthedRequest = Request & { auth?: AuthUser };
 
 const loginSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
+const registerSchema = z.object({
+  firstName: z.string().trim().min(2, "First name must have at least 2 characters.").max(60),
+  surname: z.string().trim().min(2, "Surname must have at least 2 characters.").max(60),
+  email: z.string().trim().email().max(254),
+  password: z.string().min(10, "Password must contain at least 10 characters.").max(128)
+    .regex(/[a-z]/, "Password must include a lowercase letter.")
+    .regex(/[A-Z]/, "Password must include an uppercase letter.")
+    .regex(/[0-9]/, "Password must include a number.")
+    .regex(/[^A-Za-z0-9]/, "Password must include a symbol."),
+  confirmPassword: z.string(),
+}).refine(value => value.password === value.confirmPassword, { message: "Passwords do not match.", path: ["confirmPassword"] });
 const startSchema = z.object({
   businessKey: z.string().min(3).max(100),
   idempotencyKey: z.string().min(5).max(200),
@@ -28,6 +39,10 @@ const faultSchema = z.object({ participant: z.enum(["crm", "inventory", "payment
 
 function publicUser(user: AuthUser) {
   return { id: user.id, email: user.email, name: user.name, role: user.role };
+}
+
+function isDuplicateEmailError(error: unknown) {
+  return error instanceof Error && error.message === "EMAIL_ALREADY_EXISTS" || (typeof error === "object" && error !== null && "code" in error && error.code === 11000);
 }
 
 export function createApp(engine: WorkflowEngine, store: WorkflowStore, options: { jwtSecret: string; frontendUrl: string }) {
@@ -65,6 +80,28 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
       const token = jwt.sign({ sub: auth.id, role: auth.role, email: auth.email, name: auth.name }, options.jwtSecret, { expiresIn: "8h" });
       return res.json({ data: { token, user: publicUser(auth) } });
     } catch (error) { next(error); }
+  });
+
+  app.post("/api/auth/register", async (req, res, next) => {
+    try {
+      const input = registerSchema.parse(req.body);
+      const email = input.email.toLowerCase();
+      const passwordHash = await bcrypt.hash(input.password, 12);
+      await store.createUser({
+        id: newId("user"),
+        name: `${input.firstName} ${input.surname}`,
+        email,
+        passwordHash,
+        role: "REQUESTER",
+        department: "Self-registered",
+        active: true,
+        createdAt: new Date().toISOString(),
+      });
+      return res.status(201).json({ data: { message: "Account created. Please sign in with your email and password." } });
+    } catch (error) {
+      if (isDuplicateEmailError(error)) return res.status(409).json({ error: "An account with this email already exists. Please sign in instead." });
+      next(error);
+    }
   });
 
   app.get("/api/me", authenticate, (req: AuthedRequest, res) => res.json({ data: publicUser(req.auth!) }));

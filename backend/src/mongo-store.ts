@@ -46,10 +46,11 @@ export class MongoStore implements WorkflowStore {
   }
 
   async seedUsers(users: User[]) {
-    await Promise.all(users.map(user => this.users.updateOne({ email: user.email }, { $setOnInsert: user }, { upsert: true })));
+    await Promise.all(users.map(user => this.users.updateOne({ email: user.email.toLowerCase() }, { $setOnInsert: { ...user, email: user.email.toLowerCase() } }, { upsert: true })));
   }
-  async findUserByEmail(email: string) { return cloneDocument(await this.users.findOne({ email: { $regex: `^${email}$`, $options: "i" } })); }
+  async findUserByEmail(email: string) { return cloneDocument(await this.users.findOne({ email: email.toLowerCase() })); }
   async getUser(id: string) { return cloneDocument(await this.users.findOne({ id })); }
+  async createUser(user: User) { await this.users.insertOne({ ...user, email: user.email.toLowerCase() }); }
   async createExecution(execution: WorkflowExecution) { await this.executions.insertOne(execution); }
   async getExecution(id: string) { return cloneDocument(await this.executions.findOne({ id })); }
   async findExecutionByStartKey(key: string) { return cloneDocument(await this.executions.findOne({ startIdempotencyKey: key })); }

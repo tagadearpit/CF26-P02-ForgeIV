@@ -6,7 +6,10 @@ FlowGuard separates the browser, API, worker, and database. The frontend never r
 
 | Control | Prototype implementation | Why it matters |
 |---|---|---|
-| Authentication | JWT returned by `/api/auth/login`; demo password is checked with bcrypt. | Prevents unauthenticated API access. |
+| Authentication | JWT returned by `/api/auth/login`; all passwords, including self-registered accounts, are checked with bcrypt. | Prevents unauthenticated API access. |
+| Account registration | `/api/auth/register` validates first name, surname, email, password confirmation, and a 10-character mixed-character password; the API stores only a bcrypt hash. | Keeps plaintext credentials out of MongoDB and blocks malformed registration input. |
+| Duplicate-email control | Emails are normalized to lowercase and a unique MongoDB index protects the user collection; a duplicate registration returns `409 Conflict`. | Prevents account ambiguity and remains safe under concurrent registration requests. |
+| Least privilege | A self-registered account starts as `REQUESTER`; it cannot approve, cancel, or recover workflows. | Limits a new account to the lowest role that can start a workflow. |
 | Authorization | API middleware checks roles for requester, approver, and administrator operations. | Prevents a normal operator from triggering recovery mutations. |
 | Recovery control | Only `ADMIN` can cancel a workflow, begin compensation, or request manual recovery retry. | Reduces the risk of destructive recovery actions. |
 | CORS | The API accepts the configured `FRONTEND_URL` and local development origins. | Restricts browser cross-origin calls to the known frontend. |
@@ -27,8 +30,8 @@ FlowGuard separates the browser, API, worker, and database. The frontend never r
 
 ## Privacy and demonstration safeguards
 
-The repository contains only fictional purchase data and intentionally seeded demo users. The published `admin@flowguard.demo` credentials are **hackathon demo credentials only**. Before a real deployment, remove public demo credentials, use managed identity or SSO, rotate all secrets, restrict database network access, introduce rate limiting, and implement a retention policy for audit events.
+The repository contains only fictional purchase data and intentionally seeded demo users. The published `admin@flowguard.demo` credentials are **hackathon demo credentials only**. A self-registered account is stored in the configured MongoDB user collection with a bcrypt hash rather than a plaintext password. Before a real deployment, remove public demo credentials, use managed identity or SSO, rotate all secrets, restrict database network access, introduce rate limiting, and implement a retention policy for audit events.
 
 ## Known prototype limits
 
-This prototype does not claim compliance certification, production payment handling, encryption-key management, intrusion detection, or a full privacy program. Its security contribution is a defensible baseline for a hackathon proof: hashed demo passwords, role-enforced endpoints, environment-only secrets, CORS restriction, and a durable audit trail.
+This prototype does not claim compliance certification, production payment handling, encryption-key management, intrusion detection, email verification, password reset, rate limiting, or a full privacy program. Its security contribution is a defensible baseline for a hackathon proof: bcrypt-protected credentials, input validation, normalized unique email addresses, role-enforced endpoints, environment-only secrets, CORS restriction, and a durable audit trail.

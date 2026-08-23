@@ -26,6 +26,7 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
 
 export const flowguardApi = {
   login: (email: string, password: string) => request<{ token: string; user: AppUser }>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
+  register: (body: { firstName: string; surname: string; email: string; password: string; confirmPassword: string }) => request<{ message: string }>("/api/auth/register", { method: "POST", body: JSON.stringify(body) }),
   dashboard: (token: string) => request<{ counts: Record<string, number>; recentExecutions: WorkflowExecution[]; openApprovals: ApprovalTask[] }>("/api/dashboard", {}, token),
   executions: (token: string) => request<WorkflowExecution[]>("/api/executions", {}, token),
   adminAudit: (token: string) => request<AdminAuditEntry[]>("/api/audit/admin-actions", {}, token),

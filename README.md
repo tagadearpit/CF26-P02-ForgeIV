@@ -58,6 +58,7 @@ The operations console now also includes a **Reliability Analytics** view calcul
 | Durable execution | MongoDB documents for executions, steps, jobs, and events. |
 | Idempotent operations | Stable per-operation keys stored in `participantOperations`. |
 | Human checkpoint | Persistent `approvalTasks` with a user, status, deadline, and decision. |
+| Secure self-registration | A new account is validated, stored with a bcrypt password hash, assigned the safe `REQUESTER` role, then directed to sign in. |
 | Retry | Delayed retry through `availableAt` and bounded attempt count. |
 | Worker crash recovery | Short job lease that a later worker can reclaim. |
 | Compensation / Saga | Reverse-order business actions after rejection or permanent failure. |
@@ -163,14 +164,15 @@ ENABLE_IN_PROCESS_WORKER=true PORT=8081 WORKER_POLL_MS=50 pnpm dev:api
 
 ## Usage instructions
 
-1. Open the frontend and sign in using `admin@flowguard.demo` / `demo123`.
-2. Choose **Start workflow** and submit a purchase request.
-3. Open the execution detail to see the workflow pulse and event history.
-4. Sign in as `manager@flowguard.demo` / `demo123` to approve or reject the request.
-5. Use **Inventory fails once** in the launcher to demonstrate retry.
-6. Reject a request to demonstrate compensation and inspect the recovery evidence.
-7. Open **Reliability analytics** to compare completed, compensated, and manual-exception outcomes.
-8. Open **Judge tour** to rehearse the six-minute evaluation walkthrough with the exact evidence to call out at every screen.
+1. Open the frontend and select **Create an account** to register a new requester account, or sign in using `admin@flowguard.demo` / `demo123` for the prepared demo.
+2. A registration requires first name, surname, email, a strong password, and password confirmation. The new account is redirected to sign in after it is created.
+3. Choose **Start workflow** and submit a purchase request.
+4. Open the execution detail to see the workflow pulse and event history.
+5. Sign in as `manager@flowguard.demo` / `demo123` to approve or reject the request.
+6. Use **Inventory fails once** in the launcher to demonstrate retry.
+7. Reject a request to demonstrate compensation and inspect the recovery evidence.
+8. Open **Reliability analytics** to compare completed, compensated, and manual-exception outcomes.
+9. Open **Judge tour** to rehearse the six-minute evaluation walkthrough with the exact evidence to call out at every screen.
 
 ## Validation / experiments / results
 
@@ -185,7 +187,7 @@ pnpm check
 node tests/api-smoke.mjs
 ```
 
-The local smoke experiment covers rejection compensation, approval completion, duplicate-start prevention, controlled retry, administrator-only recovery enforcement, and administrator action auditing. Production verification additionally confirmed Render health, Vercel availability, the CORS allow-origin contract, and browser login. See [`docs/VALIDATION.md`](docs/VALIDATION.md) and [`docs/DEPLOYMENT_VERIFICATION.md`](docs/DEPLOYMENT_VERIFICATION.md) for the test design and observed results.
+The local smoke experiment covers secure registration and login, duplicate-email rejection, rejection compensation, approval completion, duplicate-start prevention, controlled retry, administrator-only recovery enforcement, and administrator action auditing. Production verification additionally confirmed Render health, Vercel availability, the CORS allow-origin contract, and browser login. See [`docs/VALIDATION.md`](docs/VALIDATION.md) and [`docs/DEPLOYMENT_VERIFICATION.md`](docs/DEPLOYMENT_VERIFICATION.md) for the test design and observed results.
 
 ## Deployment
 

@@ -16,6 +16,7 @@ export interface WorkflowStore {
   seedUsers(users: User[]): Promise<void>;
   findUserByEmail(email: string): Promise<User | undefined>;
   getUser(id: string): Promise<User | undefined>;
+  createUser(user: User): Promise<void>;
   createExecution(execution: WorkflowExecution): Promise<void>;
   getExecution(id: string): Promise<WorkflowExecution | undefined>;
   findExecutionByStartKey(key: string): Promise<WorkflowExecution | undefined>;
@@ -68,6 +69,14 @@ export class MemoryStore implements WorkflowStore {
 
   async getUser(id: string) {
     return copy(this.users.get(id));
+  }
+
+  async createUser(user: User) {
+    const email = user.email.toLowerCase();
+    if ([...this.users.values()].some(existing => existing.email.toLowerCase() === email)) {
+      throw new Error("EMAIL_ALREADY_EXISTS");
+    }
+    this.users.set(user.id, copy({ ...user, email }));
   }
 
   async createExecution(execution: WorkflowExecution) {

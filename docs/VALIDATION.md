@@ -21,6 +21,8 @@ The backend workflow engine has four focused unit tests in `backend/tests/engine
 
 | Scenario | Controlled condition | Evidence collected |
 |---|---|---|
+| Secure registration and login | A new person submits valid identity details and a confirmed strong password. | Account is created with requester-level access, then can sign in using the new credentials. |
+| Duplicate-email rejection | The same email is submitted for registration a second time. | API returns `409 Conflict`; the original account remains the sole identity for that email. |
 | Rejection compensation | Manager rejects after payment authorization. | Compensated workflow and compensated forward steps. |
 | Successful completion | Manager approves. | `WORKFLOW_COMPLETED` event. |
 | Duplicate start prevention | Same start idempotency key is submitted twice. | Same execution ID is returned. |
@@ -30,12 +32,14 @@ The backend workflow engine has four focused unit tests in `backend/tests/engine
 
 ## Local result
 
-The smoke run completed successfully in this workspace on 23 August 2026. The final compliance re-run again returned `PASS` for all six listed scenarios:
+The smoke run completed successfully in this workspace on 23 August 2026. The secure-registration re-run returned `PASS` for all eight listed scenarios:
 
 ```json
 {
   "result": "PASS",
   "cases": [
+    "secure registration and login",
+    "duplicate-email rejection",
     "rejection compensation",
     "approval completion",
     "start idempotency",
