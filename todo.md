@@ -57,3 +57,13 @@
 - [x] Add or correct missing technical, validation, limitation, and AI-disclosure documentation.
 - [x] Re-run frontend and backend validation, including the end-to-end resilience smoke experiment.
 - [ ] Add real team-member information, then commit the compliance fixes and publish the final audit result.
+
+## Professional Motion Refinement
+
+- [x] Add restrained route, navigation, menu, health-signal, and tactile interaction motion.
+- [x] Preserve reduced-motion support and validate the production frontend build.
+
+## Workflow Feedback Animation Refinement
+
+- [x] Review loading, refresh, and decision surfaces for high-value state-feedback motion.
+- [x] Add restrained workflow-status and action-feedback animation, then validate the production build.

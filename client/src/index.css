@@ -1,3 +1,4 @@
+/* FlowGuard Calm Operations Console: quiet, evidence-led motion supports state recognition without becoming decorative. */
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -44,6 +45,8 @@
 }
 
 :root {
+  --fg-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --fg-ease-standard: cubic-bezier(0.77, 0, 0.175, 1);
   --primary: oklch(0.52 0.18 264);
   --primary-foreground: oklch(0.985 0.002 260);
   --sidebar-primary: oklch(0.52 0.18 264);
@@ -111,6 +114,7 @@
 
 @layer base {
   * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground;
     font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -131,4 +135,60 @@
   .font-editorial { font-family: "Fraunces", Georgia, serif; }
   .login-surface { background-image: radial-gradient(circle at 20% 10%, rgba(53, 106, 230, 0.18), transparent 32%), radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.10), transparent 30%); }
   .login-grid::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.2; background-image: linear-gradient(rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(90deg, black, transparent 76%); }
+  .fg-page-enter { animation: fg-page-enter 220ms var(--fg-ease-out) both; }
+  .fg-surface-enter { animation: fg-surface-enter 180ms var(--fg-ease-out) both; transform-origin: top right; }
+  .fg-nav-stagger > * { animation: fg-nav-enter 180ms var(--fg-ease-out) both; }
+  .fg-nav-stagger > *:nth-child(2) { animation-delay: 35ms; }
+  .fg-nav-stagger > *:nth-child(3) { animation-delay: 70ms; }
+  .fg-nav-stagger > *:nth-child(4) { animation-delay: 105ms; }
+  .fg-nav-stagger > *:nth-child(5) { animation-delay: 140ms; }
+  .fg-nav-stagger > *:nth-child(6) { animation-delay: 175ms; }
+  .fg-nav-stagger > *:nth-child(7) { animation-delay: 210ms; }
+  .fg-health-signal { position: relative; }
+  .fg-health-signal::after { position: absolute; inset: -3px; border: 1px solid rgb(16 185 129 / 0.38); border-radius: 999px; content: ""; animation: fg-health-pulse 2.8s var(--fg-ease-standard) infinite; }
+  .fg-interactive { transition: transform 160ms var(--fg-ease-out), border-color 160ms var(--fg-ease-out), box-shadow 160ms var(--fg-ease-out), background-color 160ms var(--fg-ease-out); }
+  .fg-interactive:active { transform: scale(0.97); }
+  .fg-status-badge { transition: background-color 180ms var(--fg-ease-out), color 180ms var(--fg-ease-out), box-shadow 180ms var(--fg-ease-out); }
+  .fg-status-dot { position: relative; }
+  .fg-status-active .fg-status-dot::after, .fg-status-waiting .fg-status-dot::after { position: absolute; inset: -3px; border: 1px solid currentColor; border-radius: 999px; content: ""; }
+  .fg-status-active .fg-status-dot::after { animation: fg-status-breathe 2.6s var(--fg-ease-standard) infinite; }
+  .fg-status-waiting .fg-status-dot::after { animation: fg-status-breathe 3.4s var(--fg-ease-standard) infinite; }
+  .fg-workflow-node { position: relative; transition: transform 180ms var(--fg-ease-out), box-shadow 180ms var(--fg-ease-out), background-color 180ms var(--fg-ease-out); }
+  .fg-workflow-node-active { box-shadow: 0 0 0 4px rgb(53 106 230 / 0.10); animation: fg-node-settle 2.8s var(--fg-ease-standard) infinite; }
+  .fg-workflow-node-waiting { box-shadow: 0 0 0 4px rgb(245 158 11 / 0.10); }
+}
+
+@keyframes fg-page-enter {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fg-surface-enter {
+  from { opacity: 0; transform: translateY(-4px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fg-nav-enter {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fg-health-pulse {
+  0%, 70%, 100% { opacity: 0; transform: scale(0.85); }
+  22% { opacity: 0.78; transform: scale(1.45); }
+}
+
+@keyframes fg-status-breathe {
+  0%, 72%, 100% { opacity: 0; transform: scale(0.85); }
+  20% { opacity: 0.5; transform: scale(1.55); }
+}
+
+@keyframes fg-node-settle {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }

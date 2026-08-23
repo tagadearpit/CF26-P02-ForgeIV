@@ -75,3 +75,4 @@ The mark is a forward-moving, interlocked path made of three rounded segments: r
 - Authentication must visibly carry an operational motif: workflow pulse, evidence strip, status chip, or event state—not only a product image.
 - Primary actions describe the operational consequence of proceeding rather than using generic entry language.
 - Abstract imagery is paired with concrete coordination cues such as a business key, owner, event status, and decision deadline.
+- Motion is limited to route orientation, live-system health, contextual menus, and tactile confirmation. It uses short opacity-and-transform transitions, never decorative loops; all nonessential movement yields to reduced-motion preferences.

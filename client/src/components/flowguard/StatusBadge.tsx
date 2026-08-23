@@ -1,4 +1,4 @@
-/** FlowGuard Calm Operations Console: restrained state signaling with color reserved for meaningful workflow status. */
+/** FlowGuard Calm Operations Console: restrained state signaling uses subtle activity cues only for live, waiting, or retrying workflow states. */
 import { cn } from "@/lib/utils";
 
 const styles: Record<string, string> = {
@@ -30,5 +30,7 @@ export function labelForStatus(status: string) {
 
 export function StatusBadge({ status, className }: { status: string; className?: string }) {
   const key = status === "RUNNING" ? "RUNNING" : status === "COMPENSATING" ? "COMPENSATING" : status;
-  return <span className={cn("inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] ring-1", styles[key] ?? "bg-slate-100 text-slate-700 ring-slate-200", className)}><span className="size-1.5 rounded-full bg-current opacity-75" />{labelForStatus(status)}</span>;
+  const isActive = ["RUNNING", "RUNNING_STEP", "COMPENSATING", "COMPENSATING_STEP", "RETRYING"].includes(status);
+  const isWaiting = ["WAITING_FOR_APPROVAL", "WAITING", "OPEN"].includes(status);
+  return <span className={cn("fg-status-badge inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] ring-1", isActive && "fg-status-active", isWaiting && "fg-status-waiting", styles[key] ?? "bg-slate-100 text-slate-700 ring-slate-200", className)}><span className="fg-status-dot size-1.5 rounded-full bg-current opacity-75" />{labelForStatus(status)}</span>;
 }
