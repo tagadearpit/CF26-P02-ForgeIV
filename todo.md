@@ -49,3 +49,11 @@
 - [x] Re-check the deployed CORS response and real browser login flow.
 - [x] Add a GitHub Actions monitor for API health, frontend availability, and CORS headers.
 - [x] Set Render `FRONTEND_URL` to the actual Vercel production URL, then re-run the monitor successfully.
+
+## Hackathon Submission Compliance Audit
+
+- [x] Review the theme, evaluation framework, submitted blueprint, README, and existing project evidence.
+- [x] Map each required README outcome to a clear section and verifiable repository artifact.
+- [x] Add or correct missing technical, validation, limitation, and AI-disclosure documentation.
+- [x] Re-run frontend and backend validation, including the end-to-end resilience smoke experiment.
+- [ ] Add real team-member information, then commit the compliance fixes and publish the final audit result.

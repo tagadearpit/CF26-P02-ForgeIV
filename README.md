@@ -54,6 +54,10 @@ Render Background Worker (processing, retries, timeout scan, compensation)
 
 The detailed architecture is in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
+## Research and design rationale
+
+The project is designed as a narrow experiment in reliable human-in-the-loop coordination rather than a broad automation suite. [`docs/RESEARCH_AND_DECISIONS.md`](docs/RESEARCH_AND_DECISIONS.md) states the research question, explains the Saga, compensation, atomic job-claim, and durable-approval decisions, compares the approach with a normal request-response baseline, and cites the sources that informed the design.
+
 ## Technology stack
 
 | Layer | Choice |
@@ -145,7 +149,7 @@ pnpm check
 node tests/api-smoke.mjs
 ```
 
-The smoke run in this workspace passed all four scenarios. See [`docs/VALIDATION.md`](docs/VALIDATION.md) for the experiment design and exact result.
+The local smoke experiment covers rejection compensation, approval completion, duplicate-start prevention, controlled retry, administrator-only recovery enforcement, and administrator action auditing. Production verification additionally confirmed Render health, Vercel availability, the CORS allow-origin contract, and browser login. See [`docs/VALIDATION.md`](docs/VALIDATION.md) and [`docs/DEPLOYMENT_VERIFICATION.md`](docs/DEPLOYMENT_VERIFICATION.md) for the test design and observed results.
 
 ## Deployment
 
@@ -155,9 +159,11 @@ Use the included `vercel.json` and `render.yaml`, then follow the exact environm
 
 This is a prototype-scale proof of the difficult coordination mechanism. It deliberately uses mock CRM, inventory, payment, invoice, and notification adapters. A production system would need real connector reconciliation, secrets rotation, rate limiting, database backups, monitoring, alerting, distributed tracing, stronger network restrictions, and a dedicated high-throughput queue if workload volume increases.
 
+The implemented scope is one predefined purchase-request workflow. Generic workflow-definition publishing, real financial settlement, multiple approver voting, and automatic resolution of ambiguous external outcomes are deliberately out of scope. See [`docs/SECURITY_AND_CORRECTNESS.md`](docs/SECURITY_AND_CORRECTNESS.md) for prototype safeguards and limits.
+
 ## Team members
 
-Replace this section before submission with the real team information.
+> **Required before submission:** Replace the table below with the real team information. The repository intentionally does not invent names or contributions.
 
 | Name | Role | Contribution |
 |---|---|---|
@@ -169,4 +175,4 @@ AI-assisted development was used for architecture exploration, UI design iterati
 
 ## Hackathon readiness
 
-Before submission, complete [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md). It maps the implementation and evidence to the CODEFORGE evaluation framework.
+Before submission, complete [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md). It maps the implementation and evidence to the CODEFORGE evaluation framework. Use [`docs/TECHNICAL_DEFENSE.md`](docs/TECHNICAL_DEFENSE.md) for judge questions and [`docs/COMPLIANCE_AUDIT.md`](docs/COMPLIANCE_AUDIT.md) for a criterion-by-criterion audit.
