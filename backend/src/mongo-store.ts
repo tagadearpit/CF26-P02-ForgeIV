@@ -110,7 +110,11 @@ export class MongoStore implements WorkflowStore {
   async saveOperation(operation: ParticipantOperation) { await this.operations.updateOne({ participant: operation.participant, idempotencyKey: operation.idempotencyKey }, { $setOnInsert: operation }, { upsert: true }); }
   async setFault(rule: FaultRule) { await this.faults.updateOne({ participant: rule.participant }, { $set: rule }, { upsert: true }); }
   async consumeFault(participant: string) {
-    const result = await this.faults.findOneAndUpdate({ participant: participant as FaultRule["participant"], remaining: { $gt: 0 } }, { $inc: { remaining: -1 }, $set: { updatedAt: now() } }, { returnDocument: "before" });
-    return cloneDocument(result as unknown as FaultRule | null);
+    const rule = await this.faults.findOne({ participant: participant as FaultRule["participant"], remaining: { $gt: 0 } });
+    if (!rule) return undefined;
+    if (rule.mode !== "FAIL_ALWAYS") {
+      await this.faults.updateOne({ participant: rule.participant }, { $inc: { remaining: -1 }, $set: { updatedAt: now() } });
+    }
+    return cloneDocument(rule);
   }
 }

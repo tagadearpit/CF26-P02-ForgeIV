@@ -67,8 +67,14 @@ const deniedRequesterDetail = await fetch(`${base}/api/executions/${rejected.id}
 if (deniedRequesterDetail.status !== 403) throw new Error("Requester could view an unrelated workflow detail");
 const administratorExecutions = await request("/api/executions", {}, admin.token);
 if (!administratorExecutions.some(execution => execution.id === requesterWorkflow.id) || !administratorExecutions.some(execution => execution.id === rejected.id)) throw new Error("Administrator did not retain cross-workflow visibility");
+const approverExecutions = await request("/api/executions", {}, manager.token);
+if (!approverExecutions.some(execution => execution.id === requesterWorkflow.id) || !approverExecutions.some(execution => execution.id === rejected.id)) throw new Error("Approver did not retain read-only cross-workflow visibility");
+const operatorExecutions = await request("/api/executions", {}, operator.token);
+if (!operatorExecutions.some(execution => execution.id === requesterWorkflow.id) || !operatorExecutions.some(execution => execution.id === rejected.id)) throw new Error("Operator did not retain read-only cross-workflow visibility");
 let waiting = await waitForStatus(admin.token, rejected.id, "WAITING_FOR_APPROVAL");
 await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "REJECT", comment: "Validate compensation path" }) }, manager.token);
+const managerInboxAfterDecision = await request("/api/approvals", {}, manager.token);
+if (managerInboxAfterDecision.some(task => task.id === waiting.approval.id)) throw new Error("Decided approval remained in the approver inbox");
 const compensated = await waitForStatus(admin.token, rejected.id, "COMPENSATED");
 if (!compensated.steps.filter(step => ["create-order", "reserve-inventory", "authorize-payment"].includes(step.stepKey)).every(step => step.status === "COMPENSATED")) throw new Error("Compensation did not reverse every eligible completed step");
 
@@ -77,6 +83,8 @@ waiting = await waitForStatus(admin.token, successful.id, "WAITING_FOR_APPROVAL"
 const deniedCancel = await fetch(`${base}/api/executions/${successful.id}/cancel`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${operator.token}` } });
 if (deniedCancel.status !== 403) throw new Error("Operator recovery cancellation was not rejected by the API");
 await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "APPROVE", comment: "Validate administrator approval path" }) }, admin.token);
+const adminInboxAfterDecision = await request("/api/approvals", {}, admin.token);
+if (adminInboxAfterDecision.some(task => task.id === waiting.approval.id)) throw new Error("Decided approval remained in the administrator inbox");
 const completed = await waitForStatus(admin.token, successful.id, "COMPLETED");
 if (!completed.events.some(event => event.type === "WORKFLOW_COMPLETED")) throw new Error("Completion event was not written");
 
@@ -98,7 +106,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["secure registration and login", "profile update and avatar persistence", "user-scoped profile activity history", "requester data isolation", "administrator cross-workflow visibility", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "profile update and avatar persistence", "user-scoped profile activity history", "requester data isolation", "administrator cross-workflow visibility", "approver and operator read-only visibility", "duplicate-email rejection", "rejection compensation", "decided approval inbox clearing", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

@@ -183,9 +183,14 @@ export class WorkflowEngine {
     if (decision === "APPROVE") {
       await this.store.upsertStep({ ...step, status: "SUCCEEDED", output: { decision, comment, decidedAt: task.decidedAt }, updatedAt: timestamp() });
       const next = FORWARD_STEPS[step.position + 1];
-      await this.store.updateExecution(execution.id, { status: "RUNNING", currentStepKey: next.key });
       await this.event(execution.id, "APPROVAL_APPROVED", step.stepKey, { comment }, actorId);
-      await this.enqueue(execution.id, next.key, "FORWARD", 10);
+      if (!next) {
+        await this.store.updateExecution(execution.id, { status: "COMPLETED", currentStepKey: step.stepKey });
+        await this.event(execution.id, "WORKFLOW_COMPLETED", step.stepKey);
+      } else {
+        await this.store.updateExecution(execution.id, { status: "RUNNING", currentStepKey: next.key });
+        await this.enqueue(execution.id, next.key, "FORWARD", 10);
+      }
     } else {
       await this.store.upsertStep({ ...step, status: "FAILED", error: decision === "REJECT" ? "Request rejected by approver" : "Changes requested by approver", updatedAt: timestamp() });
       await this.event(execution.id, decision === "REJECT" ? "APPROVAL_REJECTED" : "CHANGES_REQUESTED", step.stepKey, { comment }, actorId);

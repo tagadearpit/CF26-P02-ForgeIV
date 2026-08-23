@@ -27,8 +27,10 @@ The backend has six focused unit tests: four workflow-engine tests in `backend/t
 | User-scoped profile activity history | The new requester starts a workflow, then loads their protected activity endpoint. | The timeline includes that requester’s `WORKFLOW_STARTED` event and does not query another account’s requests. |
 | Requester data isolation | The requester asks for the workflow list and an unrelated execution detail. | Only their own execution is listed; an unrelated detail returns `403`. |
 | Administrator cross-workflow visibility | An administrator requests the workflow list. | Both the administrator’s and the requester’s executions are visible. |
+| Operational role visibility | The assigned approver and recovery operator request the workflow list. | Both roles retain read-only visibility across executions for approval, recovery, analytics, and judge-tour use. |
 | Duplicate-email rejection | The same email is submitted for registration a second time. | API returns `409 Conflict`; the original account remains the sole identity for that email. |
 | Rejection compensation | Manager rejects after payment authorization. | Compensated workflow and compensated forward steps. |
+| Decided approval inbox clearing | An approver rejects and an administrator approves a waiting request, then each reloads the inbox. | The decided task is absent because `/api/approvals` returns only `OPEN` tasks. |
 | Administrator approval completion | Administrator approves a waiting request from the approval path. | `WORKFLOW_COMPLETED` event. |
 | Duplicate start prevention | Same start idempotency key is submitted twice. | Same execution ID is returned. |
 | Retry behavior | Inventory is configured to fail once. | `STEP_RETRY_SCHEDULED` event followed by progress to approval. |
@@ -37,7 +39,7 @@ The backend has six focused unit tests: four workflow-engine tests in `backend/t
 
 ## Local result
 
-The smoke run completed successfully in this workspace on 23 August 2026. The access-control re-run returned `PASS` for all twelve listed scenarios:
+The smoke run completed successfully in this workspace on 23 August 2026. The backend-fix re-run returned `PASS` for all fourteen listed scenarios:
 
 ```json
 {
@@ -48,8 +50,10 @@ The smoke run completed successfully in this workspace on 23 August 2026. The ac
     "user-scoped profile activity history",
     "requester data isolation",
     "administrator cross-workflow visibility",
+    "approver and operator read-only visibility",
     "duplicate-email rejection",
     "rejection compensation",
+    "decided approval inbox clearing",
     "administrator approval completion",
     "start idempotency",
     "controlled retry",

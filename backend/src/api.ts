@@ -71,7 +71,8 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     if (!req.auth || !roles.includes(req.auth.role)) return res.status(403).json({ error: "You do not have permission for this action." });
     next();
   };
-  const canReadExecution = (user: AuthUser, execution: { requestedBy: string }) => user.role === "ADMIN" || execution.requestedBy === user.id;
+  const canReadExecution = (user: AuthUser, execution: { requestedBy: string }) =>
+    user.role === "ADMIN" || user.role === "APPROVER" || user.role === "OPERATOR" || execution.requestedBy === user.id;
 
   app.get("/health", (_req, res) => res.json({ status: "ok", service: "flowguard-api", timestamp: new Date().toISOString() }));
 
@@ -185,7 +186,8 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
 
   app.get("/api/approvals", authenticate, authorize("APPROVER", "ADMIN"), async (req: AuthedRequest, res, next) => {
     try {
-      const tasks = await store.listApprovals(req.auth!.role === "ADMIN" ? undefined : req.auth!.id);
+      const tasks = (await store.listApprovals(req.auth!.role === "ADMIN" ? undefined : req.auth!.id))
+        .filter(task => task.status === "OPEN");
       res.json({ data: tasks });
     } catch (error) { next(error); }
   });

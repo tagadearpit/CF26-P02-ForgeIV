@@ -137,3 +137,8 @@
 
 - [x] Add FAQ search, a support contact action, and explicit tutorial progress and skip controls.
 - [x] Add a one-time first-submission success message, validate the experience, checkpoint, and synchronize GitHub.
+
+## Confirmed Backend Reliability Fixes
+
+- [x] Add backend-only Vitest configuration and apply the five confirmed targeted backend fixes.
+- [x] Verify clean backend type checking, six Vitest tests, behavioral parity, checkpoint, and GitHub synchronization.
