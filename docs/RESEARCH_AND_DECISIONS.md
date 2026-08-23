@@ -33,7 +33,7 @@ An ordinary API controller could call CRM, inventory, payment, and approval endp
 
 ## Scope boundary
 
-FlowGuard is a working prototype of a **single predefined purchase-request workflow**. The current implementation does not claim generic workflow definition publishing, real payment settlement, real CRM/invoice integrations, multi-stage approval voting, or automatic human resolution of ambiguous external outcomes. Those belong to the future-scope plan, not the demonstrated core claim.
+FlowGuard is a working prototype of a **single predefined purchase-request workflow**. The current implementation does not claim generic workflow definition publishing, real payment settlement, real CRM/invoice integrations, multi-stage approval voting, or automatic human resolution of ambiguous external outcomes. Those belong to future-scope plan, not the demonstrated core claim.
 
 ## References
 
