@@ -46,7 +46,14 @@ export class MongoStore implements WorkflowStore {
   }
 
   async seedUsers(users: User[]) {
-    await Promise.all(users.map(user => this.users.updateOne({ email: user.email.toLowerCase() }, { $setOnInsert: { ...user, email: user.email.toLowerCase() } }, { upsert: true })));
+    await Promise.all(users.map(user => this.users.updateOne(
+      { email: user.email.toLowerCase() },
+      {
+        $set: { name: user.name, role: user.role, department: user.department, active: user.active },
+        $setOnInsert: { ...user, email: user.email.toLowerCase() },
+      },
+      { upsert: true },
+    )));
   }
   async findUserByEmail(email: string) { return cloneDocument(await this.users.findOne({ email: email.toLowerCase() })); }
   async getUser(id: string) { return cloneDocument(await this.users.findOne({ id })); }

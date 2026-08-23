@@ -5,11 +5,9 @@ import type { User } from "./types.js";
 const DEMO_PASSWORD = "demo123";
 
 export async function seedDemoUsers(store: WorkflowStore) {
-  const existing = await store.findUserByEmail("admin@flowguard.demo");
-  if (existing) return;
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
   const users: User[] = [
-    { id: "user_admin", name: "Aria Patel", email: "admin@flowguard.demo", passwordHash, role: "ADMIN", department: "Platform Operations", active: true, createdAt: new Date().toISOString() },
+    { id: "user_admin", name: "Arpit Tagade", email: "admin@flowguard.demo", passwordHash, role: "ADMIN", department: "Platform Operations", active: true, createdAt: new Date().toISOString() },
     { id: "user_manager", name: "Asha Manager", email: "manager@flowguard.demo", passwordHash, role: "APPROVER", department: "Finance", active: true, createdAt: new Date().toISOString() },
     { id: "user_operator", name: "Omar Recovery", email: "operator@flowguard.demo", passwordHash, role: "OPERATOR", department: "Operations", active: true, createdAt: new Date().toISOString() },
     { id: "user_requester", name: "Priya Shah", email: "requester@flowguard.demo", passwordHash, role: "REQUESTER", department: "Procurement", active: true, createdAt: new Date().toISOString() },
