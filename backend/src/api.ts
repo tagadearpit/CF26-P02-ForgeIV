@@ -119,12 +119,21 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     } catch (error) { next(error); }
   });
 
-  app.post("/api/executions/:id/cancel", authenticate, authorize("ADMIN", "OPERATOR"), async (req: AuthedRequest, res, next) => {
+  app.post("/api/executions/:id/cancel", authenticate, authorize("ADMIN"), async (req: AuthedRequest, res, next) => {
     try {
       const executionId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       if (!executionId) return res.status(400).json({ error: "Workflow execution ID is required." });
       await engine.cancelExecution(executionId, req.auth!.id);
       res.status(202).json({ data: { message: "Compensation has started." } });
+    } catch (error) { next(error); }
+  });
+
+  app.post("/api/executions/:id/retry", authenticate, authorize("ADMIN"), async (req: AuthedRequest, res, next) => {
+    try {
+      const executionId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      if (!executionId) return res.status(400).json({ error: "Workflow execution ID is required." });
+      await engine.retryManualRecovery(executionId, req.auth!.id);
+      res.status(202).json({ data: { message: "Manual recovery retry has been queued." } });
     } catch (error) { next(error); }
   });
 

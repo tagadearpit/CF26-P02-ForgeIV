@@ -43,6 +43,7 @@ async function waitForStatus(token, id, expected, limit = 30) {
 const suffix = Date.now();
 const admin = await login("admin@flowguard.demo");
 const manager = await login("manager@flowguard.demo");
+const operator = await login("operator@flowguard.demo");
 
 const rejected = await start(admin.token, `SMOKE-REJECT-${suffix}`, `smoke-reject-${suffix}`);
 let waiting = await waitForStatus(admin.token, rejected.id, "WAITING_FOR_APPROVAL");
@@ -52,6 +53,8 @@ if (!compensated.steps.filter(step => ["create-order", "reserve-inventory", "aut
 
 const successful = await start(admin.token, `SMOKE-APPROVE-${suffix}`, `smoke-approve-${suffix}`);
 waiting = await waitForStatus(admin.token, successful.id, "WAITING_FOR_APPROVAL");
+const deniedCancel = await fetch(`${base}/api/executions/${successful.id}/cancel`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${operator.token}` } });
+if (deniedCancel.status !== 403) throw new Error("Operator recovery cancellation was not rejected by the API");
 await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "APPROVE", comment: "Validate successful path" }) }, manager.token);
 const completed = await waitForStatus(admin.token, successful.id, "COMPLETED");
 if (!completed.events.some(event => event.type === "WORKFLOW_COMPLETED")) throw new Error("Completion event was not written");
@@ -67,7 +70,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["rejection compensation", "approval completion", "start idempotency", "controlled retry"],
+  cases: ["rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

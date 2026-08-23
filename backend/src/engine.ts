@@ -203,6 +203,20 @@ export class WorkflowEngine {
     await this.beginCompensation(executionId, "Cancelled by an authorized operator");
   }
 
+  async retryManualRecovery(executionId: string, actorId: string) {
+    const execution = await this.store.getExecution(executionId);
+    if (!execution) throw new Error("Workflow execution was not found.");
+    if (execution.status !== "MANUAL_RECOVERY_REQUIRED") throw new Error("Only a manual recovery case can be retried.");
+    const step = await this.store.getStep(executionId, execution.currentStepKey);
+    if (!step) throw new Error("The failed recovery step was not found.");
+    const definition = this.stepDefinition(step.stepKey);
+    if (!definition.compensation) throw new Error("This recovery step does not support compensation retry.");
+    await this.store.updateExecution(executionId, { status: "COMPENSATING", currentStepKey: step.stepKey });
+    await this.store.upsertStep({ ...step, status: "PENDING", error: undefined, updatedAt: timestamp() });
+    await this.event(executionId, "MANUAL_RECOVERY_RETRY_REQUESTED", step.stepKey, { previousAttempts: step.attemptCount }, actorId);
+    await this.enqueue(executionId, step.stepKey, "COMPENSATION", 30);
+  }
+
   private async beginCompensation(executionId: string, reason: string) {
     const execution = await this.store.getExecution(executionId);
     if (!execution || terminalStates.has(execution.status)) return;

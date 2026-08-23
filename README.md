@@ -28,7 +28,7 @@ The central claim tested by this prototype is:
 
 FlowGuard uses MongoDB for workflow executions, individual step state, approval tasks, pending jobs, idempotency records, and append-only events. A Render Background Worker claims jobs, executes the next participant action, schedules retries, finds approval timeouts, and starts compensation when needed.
 
-The operations console now also includes a **Reliability Analytics** view calculated directly from execution records, a high-signal **Recovery Center** that exposes the last safe state and current operator action, and an interactive **Judge Tour** that guides a reviewer through a retry, human decision, compensation, and outcome-evidence storyline.
+The operations console now also includes a **Reliability Analytics** view calculated directly from execution records, with **24-hour** and **7-day** reporting windows based on each execution’s durable `updatedAt` timestamp. The high-signal **Recovery Center** exposes the last safe state and current operator action; only an **Administrator** can cancel a workflow, trigger compensation, or requeue a manual compensation recovery. All other signed-in roles retain read-only evidence access. The interactive **Judge Tour** guides a reviewer through a retry, human decision, compensation, and outcome-evidence storyline.
 
 | Requirement | FlowGuard mechanism |
 |---|---|

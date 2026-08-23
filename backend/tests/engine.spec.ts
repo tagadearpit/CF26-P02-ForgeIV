@@ -56,4 +56,25 @@ describe("FlowGuard workflow engine", () => {
     expect(duplicate.id).toBe(first.id);
     expect((await store.listExecutions()).length).toBe(1);
   });
+
+  it("requeues a manual compensation recovery with the same durable operation guardrail", async () => {
+    const store = new MemoryStore();
+    await store.init();
+    await seedDemoUsers(store);
+    const engine = new WorkflowEngine(store, { approvalTimeoutSeconds: 60, maxRetryAttempts: 1, retryBaseMs: 1 });
+    const execution = await engine.startPurchaseWorkflow({ requester: "Priya", sku: "SKU-88", quantity: 1, amount: 300, currency: "USD" }, "user_requester", "ORDER-1004", "client-key-1004");
+    await drain(engine, store);
+    await store.setFault({ id: "fault_payment", participant: "payment", mode: "FAIL_ALWAYS", remaining: 99, updatedAt: new Date().toISOString() });
+    const awaiting = await engine.getExecutionDetail(execution.id);
+    await engine.decideApproval(awaiting!.approval!.id, "REJECT", "user_manager", "Validate manual recovery retry");
+    await drain(engine, store);
+    expect((await engine.getExecutionDetail(execution.id))?.execution.status).toBe("MANUAL_RECOVERY_REQUIRED");
+
+    await store.setFault({ id: "fault_payment", participant: "payment", mode: "FAIL_ALWAYS", remaining: 0, updatedAt: new Date().toISOString() });
+    await engine.retryManualRecovery(execution.id, "user_admin");
+    await drain(engine, store);
+    const recovered = await engine.getExecutionDetail(execution.id);
+    expect(recovered?.execution.status).toBe("COMPENSATED");
+    expect(recovered?.events.some(event => event.type === "MANUAL_RECOVERY_RETRY_REQUESTED")).toBe(true);
+  });
 });

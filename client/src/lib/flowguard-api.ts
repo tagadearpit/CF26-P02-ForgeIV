@@ -32,5 +32,6 @@ export const flowguardApi = {
   start: (token: string, body: { businessKey: string; idempotencyKey: string; input: WorkflowExecution["input"] }) => request<WorkflowExecution>("/api/executions", { method: "POST", body: JSON.stringify(body) }, token),
   decide: (token: string, id: string, decision: "APPROVE" | "REJECT" | "REQUEST_CHANGES", comment?: string) => request<ApprovalTask>(`/api/approvals/${id}/decision`, { method: "POST", body: JSON.stringify({ decision, comment }) }, token),
   cancel: (token: string, id: string) => request<{ message: string }>(`/api/executions/${id}/cancel`, { method: "POST" }, token),
+  retryRecovery: (token: string, id: string) => request<{ message: string }>(`/api/executions/${id}/retry`, { method: "POST" }, token),
   setFault: (token: string, participant: "crm" | "inventory" | "payment" | "invoice" | "notification", mode: "FAIL_ONCE" | "FAIL_ALWAYS" | "DELAY" | "UNKNOWN_ONCE") => request<{ message: string }>("/api/demo/faults", { method: "POST", body: JSON.stringify({ participant, mode }) }, token),
 };
