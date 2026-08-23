@@ -137,6 +137,32 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     } catch (error) { next(error); }
   });
 
+  app.get("/api/audit/admin-actions", authenticate, authorize("ADMIN"), async (_req, res, next) => {
+    try {
+      const executions = await store.listExecutions();
+      const collected = (await Promise.all(executions.map(async execution => {
+        const events = await store.listEvents(execution.id);
+        return events
+          .filter(event => ["WORKFLOW_CANCELLED", "MANUAL_RECOVERY_RETRY_REQUESTED"].includes(event.type) && Boolean(event.actorId))
+          .map(event => ({ execution, event }));
+      }))).flat();
+      const actions = await Promise.all(collected.map(async ({ execution, event }) => {
+        const actor = event.actorId ? await store.getUser(event.actorId) : undefined;
+        return {
+          id: event.id,
+          executionId: execution.id,
+          businessKey: execution.businessKey,
+          action: event.type,
+          stepKey: event.stepKey,
+          createdAt: event.createdAt,
+          payload: event.payload,
+          actor: actor ? { id: actor.id, name: actor.name, email: actor.email, role: actor.role } : { id: event.actorId, name: "Unknown administrator", email: "—", role: "ADMIN" },
+        };
+      }));
+      res.json({ data: actions.sort((left, right) => right.createdAt.localeCompare(left.createdAt)) });
+    } catch (error) { next(error); }
+  });
+
   app.post("/api/demo/faults", authenticate, authorize("ADMIN"), async (req, res, next) => {
     try {
       const input = faultSchema.parse(req.body);

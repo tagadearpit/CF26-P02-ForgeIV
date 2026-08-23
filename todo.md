@@ -13,3 +13,9 @@
 - [x] Add 24-hour and 7-day outcome filters to Reliability Analytics.
 - [x] Enforce administrator-only recovery mutations in the API and Recovery Center.
 - [ ] Validate role restrictions, filtered metrics, tests, builds, and GitHub push.
+
+## Administrator Action Audit Update
+
+- [x] Identify recovery and manual-retry events that carry administrator actor IDs.
+- [x] Add an administrator audit table with workflow, action, actor, timestamp, and event metadata.
+- [x] Validate event aggregation, empty states, type checks, build, and GitHub push.

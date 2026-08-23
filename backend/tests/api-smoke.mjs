@@ -59,6 +59,13 @@ await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST"
 const completed = await waitForStatus(admin.token, successful.id, "COMPLETED");
 if (!completed.events.some(event => event.type === "WORKFLOW_COMPLETED")) throw new Error("Completion event was not written");
 
+const cancelled = await start(admin.token, `SMOKE-CANCEL-${suffix}`, `smoke-cancel-${suffix}`);
+await waitForStatus(admin.token, cancelled.id, "WAITING_FOR_APPROVAL");
+await request(`/api/executions/${cancelled.id}/cancel`, { method: "POST" }, admin.token);
+await waitForStatus(admin.token, cancelled.id, "COMPENSATED");
+const audit = await request("/api/audit/admin-actions", {}, admin.token);
+if (!audit.some(entry => entry.executionId === cancelled.id && entry.action === "WORKFLOW_CANCELLED" && entry.actor.email === "admin@flowguard.demo")) throw new Error("Administrator cancellation audit entry was not written");
+
 const duplicate = await start(admin.token, `SMOKE-APPROVE-${suffix}`, `smoke-approve-${suffix}`);
 if (duplicate.id !== successful.id) throw new Error("Start idempotency created a duplicate execution");
 
@@ -70,7 +77,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation"],
+  cases: ["rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

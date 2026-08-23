@@ -199,8 +199,8 @@ export class WorkflowEngine {
     if (!execution) throw new Error("Workflow execution was not found.");
     if (terminalStates.has(execution.status)) throw new Error("This workflow is already in a terminal state.");
     await this.store.cancelOpenApprovals(executionId);
-    await this.event(executionId, "WORKFLOW_CANCELLED", undefined, { reason: "Cancelled by an authorized operator" }, actorId);
-    await this.beginCompensation(executionId, "Cancelled by an authorized operator");
+    await this.event(executionId, "WORKFLOW_CANCELLED", undefined, { reason: "Cancelled by an administrator" }, actorId);
+    await this.beginCompensation(executionId, "Cancelled by an administrator");
   }
 
   async retryManualRecovery(executionId: string, actorId: string) {

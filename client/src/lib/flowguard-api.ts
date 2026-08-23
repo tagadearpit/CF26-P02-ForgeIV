@@ -8,6 +8,7 @@ export interface StepExecution { id: string; stepKey: string; participant: strin
 export interface ApprovalTask { id: string; executionId: string; status: "OPEN" | "APPROVED" | "REJECTED" | "CHANGES_REQUESTED" | "EXPIRED"; dueAt: string; comment?: string; }
 export interface WorkflowEvent { id: string; sequence: number; type: string; stepKey?: string; createdAt: string; payload?: Record<string, unknown>; }
 export interface ExecutionDetail { execution: WorkflowExecution; steps: StepExecution[]; events: WorkflowEvent[]; approval?: ApprovalTask; }
+export interface AdminAuditEntry { id: string; executionId: string; businessKey: string; action: "WORKFLOW_CANCELLED" | "MANUAL_RECOVERY_RETRY_REQUESTED"; stepKey?: string; createdAt: string; payload?: Record<string, unknown>; actor: AppUser; }
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
 
@@ -27,6 +28,7 @@ export const flowguardApi = {
   login: (email: string, password: string) => request<{ token: string; user: AppUser }>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
   dashboard: (token: string) => request<{ counts: Record<string, number>; recentExecutions: WorkflowExecution[]; openApprovals: ApprovalTask[] }>("/api/dashboard", {}, token),
   executions: (token: string) => request<WorkflowExecution[]>("/api/executions", {}, token),
+  adminAudit: (token: string) => request<AdminAuditEntry[]>("/api/audit/admin-actions", {}, token),
   execution: (token: string, id: string) => request<ExecutionDetail>(`/api/executions/${id}`, {}, token),
   approvals: (token: string) => request<ApprovalTask[]>("/api/approvals", {}, token),
   start: (token: string, body: { businessKey: string; idempotencyKey: string; input: WorkflowExecution["input"] }) => request<WorkflowExecution>("/api/executions", { method: "POST", body: JSON.stringify(body) }, token),
