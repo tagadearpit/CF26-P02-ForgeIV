@@ -10,7 +10,7 @@ It performs three deterministic checks:
 | Vercel frontend | The configured production URL returns `2xx` and contains the `FlowGuard` page marker |
 | CORS contract | `OPTIONS /api/auth/login` returns `Access-Control-Allow-Origin` equal to the Vercel production URL |
 
-The workflow intentionally fails when CORS is misconfigured. Set Render API environment variable `FRONTEND_URL` to `https://flowguard-error-handlers.vercel.app`, redeploy the API, and run the workflow manually to confirm the CORS check turns green.
+The workflow intentionally fails when CORS is misconfigured. Set Render API environment variable `FRONTEND_URL` to `https://flowguard-forgevi.vercel.app`, redeploy the API, and run the workflow manually to confirm the CORS check turns green.
 
 To run the same monitor locally, use:
 

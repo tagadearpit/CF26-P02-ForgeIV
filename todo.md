@@ -48,4 +48,4 @@
 
 - [x] Re-check the deployed CORS response and real browser login flow.
 - [x] Add a GitHub Actions monitor for API health, frontend availability, and CORS headers.
-- [ ] Set Render `FRONTEND_URL` to the stable Vercel production URL, then re-run the monitor successfully.
+- [x] Set Render `FRONTEND_URL` to the actual Vercel production URL, then re-run the monitor successfully.

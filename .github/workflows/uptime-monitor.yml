@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 2
     env:
       FLOWGUARD_API_URL: https://flowguard-z4kk.onrender.com
-      FLOWGUARD_FRONTEND_URL: https://flowguard-error-handlers.vercel.app
+      FLOWGUARD_FRONTEND_URL: https://flowguard-forgevi.vercel.app
       FLOWGUARD_MONITOR_TIMEOUT_MS: "20000"
     steps:
       - name: Check out repository

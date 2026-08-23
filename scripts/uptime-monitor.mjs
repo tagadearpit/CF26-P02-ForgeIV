@@ -1,6 +1,6 @@
 /** FlowGuard production monitor: verifies API health, Vercel availability, and the browser CORS contract. */
 const apiBaseUrl = (process.env.FLOWGUARD_API_URL ?? "https://flowguard-z4kk.onrender.com").replace(/\/$/, "");
-const frontendUrl = (process.env.FLOWGUARD_FRONTEND_URL ?? "https://flowguard-error-handlers.vercel.app").replace(/\/$/, "");
+const frontendUrl = (process.env.FLOWGUARD_FRONTEND_URL ?? "https://flowguard-forgevi.vercel.app").replace(/\/$/, "");
 const timeoutMs = Number(process.env.FLOWGUARD_MONITOR_TIMEOUT_MS ?? 20_000);
 
 async function request(label, url, options = {}) {
