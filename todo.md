@@ -127,3 +127,8 @@
 
 - [x] Add an illustrated, actionable first-time empty state for users with no submitted workflows.
 - [x] Validate the empty state, checkpoint, and synchronize GitHub.
+
+## Guided First Workflow Onboarding
+
+- [x] Review the workflow form, modal and accordion primitives, and first-time empty state.
+- [x] Add the interactive first-workflow modal, approval FAQ accordion, validation, checkpoint, and GitHub synchronization.
