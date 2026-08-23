@@ -63,7 +63,7 @@ const successful = await start(admin.token, `SMOKE-APPROVE-${suffix}`, `smoke-ap
 waiting = await waitForStatus(admin.token, successful.id, "WAITING_FOR_APPROVAL");
 const deniedCancel = await fetch(`${base}/api/executions/${successful.id}/cancel`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${operator.token}` } });
 if (deniedCancel.status !== 403) throw new Error("Operator recovery cancellation was not rejected by the API");
-await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "APPROVE", comment: "Validate successful path" }) }, manager.token);
+await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "APPROVE", comment: "Validate administrator approval path" }) }, admin.token);
 const completed = await waitForStatus(admin.token, successful.id, "COMPLETED");
 if (!completed.events.some(event => event.type === "WORKFLOW_COMPLETED")) throw new Error("Completion event was not written");
 
@@ -85,7 +85,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["secure registration and login", "duplicate-email rejection", "rejection compensation", "approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

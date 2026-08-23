@@ -24,7 +24,7 @@ The backend workflow engine has four focused unit tests in `backend/tests/engine
 | Secure registration and login | A new person submits valid identity details and a confirmed strong password. | Account is created with requester-level access, then can sign in using the new credentials. |
 | Duplicate-email rejection | The same email is submitted for registration a second time. | API returns `409 Conflict`; the original account remains the sole identity for that email. |
 | Rejection compensation | Manager rejects after payment authorization. | Compensated workflow and compensated forward steps. |
-| Successful completion | Manager approves. | `WORKFLOW_COMPLETED` event. |
+| Administrator approval completion | Administrator approves a waiting request from the approval path. | `WORKFLOW_COMPLETED` event. |
 | Duplicate start prevention | Same start idempotency key is submitted twice. | Same execution ID is returned. |
 | Retry behavior | Inventory is configured to fail once. | `STEP_RETRY_SCHEDULED` event followed by progress to approval. |
 | Recovery authorization | Recovery cancellation is attempted with an operator token. | API returns `403`; only an administrator may mutate recovery. |
@@ -41,7 +41,7 @@ The smoke run completed successfully in this workspace on 23 August 2026. The se
     "secure registration and login",
     "duplicate-email rejection",
     "rejection compensation",
-    "approval completion",
+    "administrator approval completion",
     "start idempotency",
     "controlled retry",
     "administrator-only recovery mutation",
