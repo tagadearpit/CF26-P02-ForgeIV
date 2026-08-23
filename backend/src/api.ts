@@ -71,6 +71,7 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     if (!req.auth || !roles.includes(req.auth.role)) return res.status(403).json({ error: "You do not have permission for this action." });
     next();
   };
+  const canReadExecution = (user: AuthUser, execution: { requestedBy: string }) => user.role === "ADMIN" || execution.requestedBy === user.id;
 
   app.get("/health", (_req, res) => res.json({ status: "ok", service: "flowguard-api", timestamp: new Date().toISOString() }));
 
@@ -142,16 +143,25 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     }
   });
 
-  app.get("/api/dashboard", authenticate, async (_req, res, next) => {
+  app.get("/api/dashboard", authenticate, async (req: AuthedRequest, res, next) => {
     try {
-      const [executions, approvals] = await Promise.all([store.listExecutions(), store.listApprovals()]);
+      const [allExecutions, approvals] = await Promise.all([store.listExecutions(), store.listApprovals()]);
+      const executions = allExecutions.filter(execution => canReadExecution(req.auth!, execution));
       const counts = executions.reduce<Record<string, number>>((acc, item) => ({ ...acc, [item.status]: (acc[item.status] ?? 0) + 1 }), {});
-      res.json({ data: { counts, recentExecutions: executions.slice(0, 8), openApprovals: approvals.filter(item => item.status === "OPEN") } });
+      const openApprovals = req.auth!.role === "ADMIN"
+        ? approvals.filter(item => item.status === "OPEN")
+        : req.auth!.role === "APPROVER"
+          ? approvals.filter(item => item.status === "OPEN" && item.assignedTo === req.auth!.id)
+          : [];
+      res.json({ data: { counts, recentExecutions: executions.slice(0, 8), openApprovals } });
     } catch (error) { next(error); }
   });
 
-  app.get("/api/executions", authenticate, async (_req, res, next) => {
-    try { res.json({ data: await store.listExecutions() }); } catch (error) { next(error); }
+  app.get("/api/executions", authenticate, async (req: AuthedRequest, res, next) => {
+    try {
+      const executions = await store.listExecutions();
+      res.json({ data: executions.filter(execution => canReadExecution(req.auth!, execution)) });
+    } catch (error) { next(error); }
   });
 
   app.post("/api/executions", authenticate, authorize("ADMIN", "REQUESTER"), async (req: AuthedRequest, res, next) => {
@@ -162,12 +172,13 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     } catch (error) { next(error); }
   });
 
-  app.get("/api/executions/:id", authenticate, async (req, res, next) => {
+  app.get("/api/executions/:id", authenticate, async (req: AuthedRequest, res, next) => {
     try {
       const executionId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       if (!executionId) return res.status(400).json({ error: "Workflow execution ID is required." });
       const detail = await engine.getExecutionDetail(executionId);
       if (!detail) return res.status(404).json({ error: "Workflow execution was not found." });
+      if (!canReadExecution(req.auth!, detail.execution)) return res.status(403).json({ error: "You do not have permission to view this workflow." });
       return res.json({ data: detail });
     } catch (error) { next(error); }
   });

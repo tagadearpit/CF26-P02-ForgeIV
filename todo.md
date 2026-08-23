@@ -116,3 +116,9 @@
 
 - [x] Review execution ownership and profile patterns for a user-scoped request timeline.
 - [x] Add protected activity retrieval, timeline rendering, validation, checkpoint, and GitHub synchronization.
+
+## Data Isolation and Configured Administrator
+
+- [x] Audit non-administrator workflow exposure and current administrator configuration.
+- [x] Restrict workflow data to its requester or an administrator, and seed one environment-configured second administrator.
+- [x] Add isolation and seeded-administrator tests, update Render configuration guidance, validate, checkpoint, and synchronize GitHub.

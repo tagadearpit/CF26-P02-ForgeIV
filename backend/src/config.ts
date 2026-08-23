@@ -11,6 +11,11 @@ export const config = {
   workerPollMs: Number(process.env.WORKER_POLL_MS ?? 1500),
   maxRetryAttempts: Number(process.env.MAX_RETRY_ATTEMPTS ?? 3),
   enableInProcessWorker: process.env.ENABLE_IN_PROCESS_WORKER === "true",
+  configuredAdmin: {
+    email: process.env.FLOWGUARD_ADMIN_EMAIL?.trim().toLowerCase(),
+    password: process.env.FLOWGUARD_ADMIN_PASSWORD,
+    name: process.env.FLOWGUARD_ADMIN_NAME?.trim() || "Configured Administrator",
+  },
 };
 
 export async function createStore(): Promise<WorkflowStore> {

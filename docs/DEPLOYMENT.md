@@ -70,10 +70,15 @@ Add the following variables to **both** the API and worker services unless expli
 | `WORKER_POLL_MS` | No | Yes | `1500` |
 | `MAX_RETRY_ATTEMPTS` | Yes | Yes | `3` |
 | `FRONTEND_URL` | Yes | No | Your deployed Vercel URL, e.g. `https://flowguard.vercel.app` |
+| `FLOWGUARD_ADMIN_EMAIL` | Yes | No | Optional second administrator email. Configure with `FLOWGUARD_ADMIN_PASSWORD`. Secret-adjacent identity. |
+| `FLOWGUARD_ADMIN_PASSWORD` | Yes | No | Optional second administrator password. **Secret**; never commit it or add it to Vercel. |
+| `FLOWGUARD_ADMIN_NAME` | Yes | No | Optional display name for the second administrator. |
 | `NODE_VERSION` | Yes | Yes | `22` |
 | `PORT` | No | No | Render supplies this automatically to the API. |
 
 After the API deploys, open `https://<your-api>.onrender.com/health`. You should see JSON with `status: "ok"`.
+
+To provision exactly one additional administrator beside the built-in `admin@flowguard.demo` account, set both `FLOWGUARD_ADMIN_EMAIL` and `FLOWGUARD_ADMIN_PASSWORD` in the **Render API** service. Optionally set `FLOWGUARD_ADMIN_NAME`. Do not set either credential value in source code, `.env` files that are committed, Vercel, or the worker service. The API refuses a partial email/password pair and hashes the configured password before MongoDB storage.
 
 ## 3. Vercel: React frontend
 

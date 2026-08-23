@@ -7,7 +7,7 @@ import { startWorkerLoop } from "./worker-runner.js";
 
 async function main() {
   const store = await createStore();
-  await seedDemoUsers(store);
+  await seedDemoUsers(store, config.configuredAdmin);
   const engine = new WorkflowEngine(store, { approvalTimeoutSeconds: config.approvalTimeoutSeconds, maxRetryAttempts: config.maxRetryAttempts, retryBaseMs: 1_000 });
   if (config.enableInProcessWorker) startWorkerLoop(engine, store, config.workerPollMs);
   const app = createApp(engine, store, { jwtSecret: config.jwtSecret, frontendUrl: config.frontendUrl });

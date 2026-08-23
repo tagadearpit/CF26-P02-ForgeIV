@@ -61,6 +61,12 @@ const duplicateRegistration = await fetch(`${base}/api/auth/register`, { method:
 if (duplicateRegistration.status !== 409) throw new Error("Duplicate registration was not rejected by the API");
 
 const rejected = await start(admin.token, `SMOKE-REJECT-${suffix}`, `smoke-reject-${suffix}`);
+const requesterExecutions = await request("/api/executions", {}, registeredAuth.token);
+if (!requesterExecutions.some(execution => execution.id === requesterWorkflow.id) || requesterExecutions.some(execution => execution.id === rejected.id)) throw new Error("Requester workflow list was not isolated to the requester");
+const deniedRequesterDetail = await fetch(`${base}/api/executions/${rejected.id}`, { headers: { authorization: `Bearer ${registeredAuth.token}` } });
+if (deniedRequesterDetail.status !== 403) throw new Error("Requester could view an unrelated workflow detail");
+const administratorExecutions = await request("/api/executions", {}, admin.token);
+if (!administratorExecutions.some(execution => execution.id === requesterWorkflow.id) || !administratorExecutions.some(execution => execution.id === rejected.id)) throw new Error("Administrator did not retain cross-workflow visibility");
 let waiting = await waitForStatus(admin.token, rejected.id, "WAITING_FOR_APPROVAL");
 await request(`/api/approvals/${waiting.approval.id}/decision`, { method: "POST", body: JSON.stringify({ decision: "REJECT", comment: "Validate compensation path" }) }, manager.token);
 const compensated = await waitForStatus(admin.token, rejected.id, "COMPENSATED");
@@ -92,7 +98,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["secure registration and login", "profile update and avatar persistence", "user-scoped profile activity history", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "profile update and avatar persistence", "user-scoped profile activity history", "requester data isolation", "administrator cross-workflow visibility", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,
