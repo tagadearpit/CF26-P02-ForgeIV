@@ -132,3 +132,8 @@
 
 - [x] Review the workflow form, modal and accordion primitives, and first-time empty state.
 - [x] Add the interactive first-workflow modal, approval FAQ accordion, validation, checkpoint, and GitHub synchronization.
+
+## Expanded First Workflow Onboarding
+
+- [x] Add FAQ search, a support contact action, and explicit tutorial progress and skip controls.
+- [x] Add a one-time first-submission success message, validate the experience, checkpoint, and synchronize GitHub.
