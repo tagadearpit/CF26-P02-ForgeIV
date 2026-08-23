@@ -199,7 +199,7 @@ The implemented scope is one predefined purchase-request workflow. Generic workf
 
 ## ForgeVI team
 
-> **Team leader:** Aditya Sam
+> **Team leader:** Aditya Devhare
 
 | Member | Team role |
 |---|---|
