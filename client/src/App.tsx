@@ -8,6 +8,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Approvals from "./pages/Approvals";
+import About from "./pages/About";
 import Architecture from "./pages/Architecture";
 import ExecutionDetail from "./pages/ExecutionDetail";
 import Home from "./pages/Home";
@@ -30,6 +31,7 @@ function Router() {
       <Route path={"/recovery"} component={Recovery} />
       <Route path={"/analytics"} component={Analytics} />
       <Route path={"/architecture"} component={Architecture} />
+      <Route path={"/about"} component={About} />
       <Route path={"/tour"} component={JudgeTour} />
       <Route path={"/executions/:id"} component={ExecutionDetail} />
       <Route path={"/404"} component={NotFound} />

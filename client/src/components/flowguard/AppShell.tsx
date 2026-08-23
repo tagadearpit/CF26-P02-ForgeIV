@@ -1,6 +1,6 @@
 /** FlowGuard Calm Operations Console: a theme-aware sidebar shell with a concise account menu for role clarity, appearance control, and safe exit. */
 import { type ReactNode } from "react";
-import { BarChart3, Bell, CircleHelp, Command, LayoutDashboard, ListChecks, LogOut, Moon, Palette, Plus, ShieldCheck, Sun, UserRound, Split } from "lucide-react";
+import { BarChart3, Bell, CircleHelp, Command, LayoutDashboard, ListChecks, LogOut, Moon, Palette, Plus, ShieldCheck, Sun, UserRound, UsersRound, Split } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -16,6 +16,7 @@ const navigation = [
   { href: "/recovery", label: "Recovery center", icon: ShieldCheck },
   { href: "/analytics", label: "Reliability analytics", icon: BarChart3 },
   { href: "/architecture", label: "System design", icon: Split },
+  { href: "/about", label: "About ForgeVI", icon: UsersRound },
   { href: "/tour", label: "Judge tour", icon: CircleHelp },
 ];
 

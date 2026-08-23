@@ -83,3 +83,8 @@
 ## Submission Team Information
 
 - [x] Replace the README placeholder with the confirmed ForgeVI name, team leader, and four-member roster.
+
+## ForgeVI About Us Page
+
+- [x] Review current page and navigation patterns for the dedicated ForgeVI mission and team page.
+- [x] Implement the About Us page, navigation entry, validation, checkpoint, and GitHub synchronization.
