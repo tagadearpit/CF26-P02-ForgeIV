@@ -1,4 +1,6 @@
-# FlowGuard
+# ForgeVI
+
+## FlowGuard
 
 > **A durable coordinator for human-in-the-loop business workflows.**
 
@@ -195,10 +197,16 @@ This is a prototype-scale proof of the difficult coordination mechanism. It deli
 
 The implemented scope is one predefined purchase-request workflow. Generic workflow-definition publishing, real financial settlement, multiple approver voting, and automatic resolution of ambiguous external outcomes are deliberately out of scope. See [`docs/SECURITY_AND_CORRECTNESS.md`](docs/SECURITY_AND_CORRECTNESS.md) for prototype safeguards and limits.
 
-## Team members
+## ForgeVI team
 
-> **Required before submission:** Replace the table below with the real team information. The repository intentionally does not invent names or contributions.
+> **Team leader:** Aditya Sam
 
+| Member | Team role |
+|---|---|
+| Aditya Sam | Team leader |
+| Arpit Tagade | Team member |
+| Rohan Kodane | Team member |
+| Atharva Andhare | Team member |
 
 ## AI assistance disclosure
 

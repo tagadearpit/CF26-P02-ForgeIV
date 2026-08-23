@@ -79,3 +79,7 @@
 - [x] Review the current theme toggle and profile control for accessible interaction refinements.
 - [x] Add a smooth theme transition and an authenticated account menu with practical settings.
 - [x] Validate the console interactions, build, checkpoint, and GitHub synchronization.
+
+## Submission Team Information
+
+- [x] Replace the README placeholder with the confirmed ForgeVI name, team leader, and four-member roster.
