@@ -165,9 +165,6 @@ The implemented scope is one predefined purchase-request workflow. Generic workf
 
 > **Required before submission:** Replace the table below with the real team information. The repository intentionally does not invent names or contributions.
 
-| Name | Role | Contribution |
-|---|---|---|
-| _Add team member_ | _Add role_ | _Add contribution_ |
 
 ## AI assistance disclosure
 
