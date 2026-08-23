@@ -22,6 +22,7 @@ The backend workflow engine has four focused unit tests in `backend/tests/engine
 | Scenario | Controlled condition | Evidence collected |
 |---|---|---|
 | Secure registration and login | A new person submits valid identity details and a confirmed strong password. | Account is created with requester-level access, then can sign in using the new credentials. |
+| Profile update and avatar persistence | The new user changes their name, email, and a bounded PNG avatar through the protected profile endpoint. | Updated identity and avatar are returned from the API; duplicate-email protection still applies to the new address. |
 | Duplicate-email rejection | The same email is submitted for registration a second time. | API returns `409 Conflict`; the original account remains the sole identity for that email. |
 | Rejection compensation | Manager rejects after payment authorization. | Compensated workflow and compensated forward steps. |
 | Administrator approval completion | Administrator approves a waiting request from the approval path. | `WORKFLOW_COMPLETED` event. |
@@ -32,13 +33,14 @@ The backend workflow engine has four focused unit tests in `backend/tests/engine
 
 ## Local result
 
-The smoke run completed successfully in this workspace on 23 August 2026. The secure-registration re-run returned `PASS` for all eight listed scenarios:
+The smoke run completed successfully in this workspace on 23 August 2026. The profile-and-registration re-run returned `PASS` for all nine listed scenarios:
 
 ```json
 {
   "result": "PASS",
   "cases": [
     "secure registration and login",
+    "profile update and avatar persistence",
     "duplicate-email rejection",
     "rejection compensation",
     "administrator approval completion",

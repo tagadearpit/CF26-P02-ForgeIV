@@ -50,7 +50,11 @@ const registered = await request("/api/auth/register", { method: "POST", body: J
 if (!registered.message.includes("Account created")) throw new Error("Registration did not return the expected sign-in instruction");
 const registeredAuth = await request("/api/auth/login", { method: "POST", body: JSON.stringify({ email: registrationEmail, password: "SecureFlow!42" }) });
 if (registeredAuth.user.role !== "REQUESTER" || registeredAuth.user.email !== registrationEmail) throw new Error("Registered user did not receive requester-level access");
-const duplicateRegistration = await fetch(`${base}/api/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ firstName: "New", surname: "Requester", email: registrationEmail, password: "SecureFlow!42", confirmPassword: "SecureFlow!42" }) });
+const updatedProfile = await request("/api/me", { method: "PATCH", body: JSON.stringify({ name: "Updated Requester", email: `updated.${registrationEmail}`, avatarDataUrl: "data:image/png;base64,iVBORw0KGgo=" }) }, registeredAuth.token);
+if (updatedProfile.name !== "Updated Requester" || updatedProfile.email !== `updated.${registrationEmail}` || !updatedProfile.avatarDataUrl) throw new Error("Profile update was not persisted");
+const clearedAvatar = await request("/api/me", { method: "PATCH", body: JSON.stringify({ name: "Updated Requester", email: `updated.${registrationEmail}`, avatarDataUrl: "" }) }, registeredAuth.token);
+if (clearedAvatar.avatarDataUrl) throw new Error("Profile avatar was not removed");
+const duplicateRegistration = await fetch(`${base}/api/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ firstName: "New", surname: "Requester", email: `updated.${registrationEmail}`, password: "SecureFlow!42", confirmPassword: "SecureFlow!42" }) });
 if (duplicateRegistration.status !== 409) throw new Error("Duplicate registration was not rejected by the API");
 
 const rejected = await start(admin.token, `SMOKE-REJECT-${suffix}`, `smoke-reject-${suffix}`);
@@ -85,7 +89,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["secure registration and login", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "profile update and avatar persistence", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

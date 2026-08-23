@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { WorkflowEngine } from "./engine.js";
 import { newId, type WorkflowStore } from "./store.js";
-import type { FaultMode, Role, ServiceName } from "./types.js";
+import type { FaultMode, Role, ServiceName, User } from "./types.js";
 
-type AuthUser = { id: string; role: Role; email: string; name: string };
+type AuthUser = { id: string; role: Role; email: string; name: string; avatarDataUrl?: string };
 type AuthedRequest = Request & { auth?: AuthUser };
 
 const loginSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
@@ -22,6 +22,11 @@ const registerSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "Password must include a symbol."),
   confirmPassword: z.string(),
 }).refine(value => value.password === value.confirmPassword, { message: "Passwords do not match.", path: ["confirmPassword"] });
+const profileSchema = z.object({
+  name: z.string().trim().min(2, "Name must have at least 2 characters.").max(120),
+  email: z.string().trim().email().max(254),
+  avatarDataUrl: z.string().max(350_000, "Avatar image is too large.").regex(/^data:image\/(png|jpeg|webp);base64,/, "Avatar must be a PNG, JPEG, or WebP image.").optional().or(z.literal("")),
+});
 const startSchema = z.object({
   businessKey: z.string().min(3).max(100),
   idempotencyKey: z.string().min(5).max(200),
@@ -37,8 +42,8 @@ const startSchema = z.object({
 const decisionSchema = z.object({ decision: z.enum(["APPROVE", "REJECT", "REQUEST_CHANGES"]), comment: z.string().max(500).optional() });
 const faultSchema = z.object({ participant: z.enum(["crm", "inventory", "payment", "invoice", "notification"]), mode: z.enum(["FAIL_ONCE", "FAIL_ALWAYS", "DELAY", "UNKNOWN_ONCE"]), delayMs: z.number().int().min(100).max(15_000).optional() });
 
-function publicUser(user: AuthUser) {
-  return { id: user.id, email: user.email, name: user.name, role: user.role };
+function publicUser(user: AuthUser | User) {
+  return { id: user.id, email: user.email, name: user.name, role: user.role, avatarDataUrl: user.avatarDataUrl };
 }
 
 function isDuplicateEmailError(error: unknown) {
@@ -54,7 +59,7 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
     const token = req.header("authorization")?.replace(/^Bearer\s+/i, "");
     if (!token) return res.status(401).json({ error: "Authentication is required." });
     try {
-      const decoded = jwt.verify(token, options.jwtSecret) as { sub: string; role: Role; email: string; name: string };
+      const decoded = jwt.verify(token, options.jwtSecret) as { sub: string; role: Role; email: string; name: string; avatarDataUrl?: string };
       req.auth = { id: decoded.sub, role: decoded.role, email: decoded.email, name: decoded.name };
       next();
     } catch {
@@ -76,9 +81,9 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
       if (!user || !user.active || !(await bcrypt.compare(input.password, user.passwordHash))) {
         return res.status(401).json({ error: "Email or password is incorrect." });
       }
-      const auth: AuthUser = { id: user.id, role: user.role, email: user.email, name: user.name };
+      const auth: AuthUser = { id: user.id, role: user.role, email: user.email, name: user.name, avatarDataUrl: user.avatarDataUrl };
       const token = jwt.sign({ sub: auth.id, role: auth.role, email: auth.email, name: auth.name }, options.jwtSecret, { expiresIn: "8h" });
-      return res.json({ data: { token, user: publicUser(auth) } });
+      return res.json({ data: { token, user: { ...publicUser(auth), avatarDataUrl: user.avatarDataUrl } } });
     } catch (error) { next(error); }
   });
 
@@ -105,6 +110,18 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
   });
 
   app.get("/api/me", authenticate, (req: AuthedRequest, res) => res.json({ data: publicUser(req.auth!) }));
+
+  app.patch("/api/me", authenticate, async (req: AuthedRequest, res, next) => {
+    try {
+      const input = profileSchema.parse(req.body);
+      const updated = await store.updateUser(req.auth!.id, { name: input.name, email: input.email, avatarDataUrl: input.avatarDataUrl || undefined });
+      if (!updated) return res.status(404).json({ error: "Your account could not be found." });
+      return res.json({ data: { ...publicUser(updated), avatarDataUrl: updated.avatarDataUrl } });
+    } catch (error) {
+      if (isDuplicateEmailError(error)) return res.status(409).json({ error: "An account with this email already exists." });
+      next(error);
+    }
+  });
 
   app.get("/api/dashboard", authenticate, async (_req, res, next) => {
     try {

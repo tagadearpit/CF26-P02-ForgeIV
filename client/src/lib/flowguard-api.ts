@@ -2,7 +2,7 @@ export type Role = "ADMIN" | "APPROVER" | "OPERATOR" | "REQUESTER";
 export type WorkflowStatus = "RUNNING" | "WAITING_FOR_APPROVAL" | "COMPENSATING" | "COMPLETED" | "COMPENSATED" | "MANUAL_RECOVERY_REQUIRED";
 export type StepStatus = "PENDING" | "RUNNING" | "WAITING" | "SUCCEEDED" | "RETRYING" | "FAILED" | "COMPENSATING" | "COMPENSATED" | "MANUAL_REVIEW";
 
-export interface AppUser { id: string; name: string; email: string; role: Role; }
+export interface AppUser { id: string; name: string; email: string; role: Role; avatarDataUrl?: string; }
 export interface WorkflowExecution { id: string; businessKey: string; status: WorkflowStatus; currentStepKey: string; input: { requester: string; sku: string; quantity: number; amount: number; currency: string; reason?: string }; correlationId: string; updatedAt: string; startedAt: string; }
 export interface StepExecution { id: string; stepKey: string; participant: string; status: StepStatus; attemptCount: number; output?: Record<string, unknown>; error?: string; idempotencyKey: string; updatedAt: string; position: number; }
 export interface ApprovalTask { id: string; executionId: string; status: "OPEN" | "APPROVED" | "REJECTED" | "CHANGES_REQUESTED" | "EXPIRED"; dueAt: string; comment?: string; }
@@ -27,6 +27,7 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
 export const flowguardApi = {
   login: (email: string, password: string) => request<{ token: string; user: AppUser }>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
   register: (body: { firstName: string; surname: string; email: string; password: string; confirmPassword: string }) => request<{ message: string }>("/api/auth/register", { method: "POST", body: JSON.stringify(body) }),
+  updateProfile: (token: string, body: { name: string; email: string; avatarDataUrl?: string }) => request<AppUser>("/api/me", { method: "PATCH", body: JSON.stringify(body) }, token),
   dashboard: (token: string) => request<{ counts: Record<string, number>; recentExecutions: WorkflowExecution[]; openApprovals: ApprovalTask[] }>("/api/dashboard", {}, token),
   executions: (token: string) => request<WorkflowExecution[]>("/api/executions", {}, token),
   adminAudit: (token: string) => request<AdminAuditEntry[]>("/api/audit/admin-actions", {}, token),

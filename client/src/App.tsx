@@ -14,6 +14,7 @@ import ExecutionDetail from "./pages/ExecutionDetail";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NewWorkflow from "./pages/NewWorkflow";
+import ProfileSettings from "./pages/ProfileSettings";
 import Recovery from "./pages/Recovery";
 import Register from "./pages/Register";
 
@@ -35,6 +36,7 @@ function Router() {
       <Route path={"/architecture"} component={Architecture} />
       <Route path={"/about"} component={About} />
       <Route path={"/register"} component={Register} />
+      <Route path={"/settings/profile"} component={ProfileSettings} />
       <Route path={"/tour"} component={JudgeTour} />
       <Route path={"/executions/:id"} component={ExecutionDetail} />
       <Route path={"/404"} component={NotFound} />

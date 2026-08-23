@@ -50,7 +50,7 @@ export class MongoStore implements WorkflowStore {
       { email: user.email.toLowerCase() },
       {
         $set: { name: user.name, role: user.role, department: user.department, active: user.active },
-        $setOnInsert: { ...user, email: user.email.toLowerCase() },
+        $setOnInsert: { id: user.id, email: user.email.toLowerCase(), passwordHash: user.passwordHash, createdAt: user.createdAt },
       },
       { upsert: true },
     )));
@@ -58,6 +58,17 @@ export class MongoStore implements WorkflowStore {
   async findUserByEmail(email: string) { return cloneDocument(await this.users.findOne({ email: email.toLowerCase() })); }
   async getUser(id: string) { return cloneDocument(await this.users.findOne({ id })); }
   async createUser(user: User) { await this.users.insertOne({ ...user, email: user.email.toLowerCase() }); }
+  async updateUser(id: string, patch: Pick<User, "name" | "email" | "avatarDataUrl">) {
+    const { avatarDataUrl, ...identity } = patch;
+    const result = await this.users.findOneAndUpdate(
+      { id },
+      avatarDataUrl
+        ? { $set: { ...identity, email: patch.email.toLowerCase(), avatarDataUrl } }
+        : { $set: { ...identity, email: patch.email.toLowerCase() }, $unset: { avatarDataUrl: "" } },
+      { returnDocument: "after" },
+    );
+    return cloneDocument(result as unknown as User | null);
+  }
   async createExecution(execution: WorkflowExecution) { await this.executions.insertOne(execution); }
   async getExecution(id: string) { return cloneDocument(await this.executions.findOne({ id })); }
   async findExecutionByStartKey(key: string) { return cloneDocument(await this.executions.findOne({ startIdempotencyKey: key })); }

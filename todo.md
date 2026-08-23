@@ -104,3 +104,10 @@
 ## Demo Administrator Identity
 
 - [x] Rename the visible and seeded FlowGuard administrator to Arpit Tagade, validate, checkpoint, and synchronize GitHub.
+
+## Deployment Repair, Profile, Alerts, and Workflow Discovery
+
+- [x] Repair the MongoDB seed-upsert conflict shown in the Render deployment log.
+- [x] Add secure profile editing, custom avatar persistence, and authenticated profile display.
+- [x] Add administrator pending-request alerts and workflow search/filter controls.
+- [x] Validate local startup, protected APIs, UI behavior, builds, checkpoint, and GitHub synchronization.
