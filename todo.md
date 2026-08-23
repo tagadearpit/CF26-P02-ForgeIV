@@ -19,3 +19,33 @@
 - [x] Identify recovery and manual-retry events that carry administrator actor IDs.
 - [x] Add an administrator audit table with workflow, action, actor, timestamp, and event metadata.
 - [x] Validate event aggregation, empty states, type checks, build, and GitHub push.
+
+## Deployment Settings Guide
+
+- [x] Verify the exact environment variables used by the API, worker, and frontend.
+- [x] Prepare MongoDB Atlas, Render API/worker, and Vercel build settings.
+- [x] Provide the deployment sequence and cross-platform verification checklist.
+
+## Vercel Deployment Preparation
+
+- [ ] Verify the connected Vercel workspace and locate the target FlowGuard project.
+- [ ] Configure `VITE_API_BASE_URL` for the Render API in the proper environment.
+- [ ] Verify Vercel build settings and report readiness for the user-controlled release step.
+
+## Render MongoDB Authentication Fix
+
+- [ ] Correct the Atlas database-user credentials and URL encoding in `MONGODB_URI`.
+- [ ] Verify Atlas network access and Render environment-variable update steps.
+- [ ] Redeploy the Render service and validate the `/health` response.
+
+## Deployment Health and Monitoring
+
+- [x] Check Render API health, Vercel availability, and deployed CORS behavior.
+- [x] Inspect the available browser diagnostics for cross-origin errors.
+- [x] Add a reusable uptime-monitoring script and validate it against both deployments.
+
+## Production Connectivity and GitHub Monitor
+
+- [x] Re-check the deployed CORS response and real browser login flow.
+- [x] Add a GitHub Actions monitor for API health, frontend availability, and CORS headers.
+- [ ] Set Render `FRONTEND_URL` to the stable Vercel production URL, then re-run the monitor successfully.
