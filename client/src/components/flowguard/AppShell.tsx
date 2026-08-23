@@ -1,6 +1,6 @@
 /** FlowGuard Calm Operations Console: an anchored sidebar shell with calm hierarchy and clear operational escape routes. */
 import { useState, type ReactNode } from "react";
-import { Bell, ChevronDown, CircleHelp, Command, LayoutDashboard, ListChecks, Plus, ShieldCheck, Split, UserRound } from "lucide-react";
+import { BarChart3, Bell, ChevronDown, CircleHelp, Command, LayoutDashboard, ListChecks, Plus, ShieldCheck, Split } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -12,7 +12,9 @@ const navigation = [
   { href: "/new", label: "Start workflow", icon: Plus },
   { href: "/approvals", label: "Approval inbox", icon: ListChecks },
   { href: "/recovery", label: "Recovery center", icon: ShieldCheck },
+  { href: "/analytics", label: "Reliability analytics", icon: BarChart3 },
   { href: "/architecture", label: "System design", icon: Split },
+  { href: "/tour", label: "Judge tour", icon: CircleHelp },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -36,10 +38,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <div className="mx-3 mt-4 rounded-xl bg-slate-900 p-3 text-white group-data-[collapsible=icon]:hidden">
+        <Link href="/tour" className="mx-3 mt-4 block rounded-xl bg-slate-900 p-3 text-white no-underline transition-transform hover:-translate-y-0.5 group-data-[collapsible=icon]:hidden">
           <div className="mb-2 flex items-center gap-2"><span className="flex size-5 items-center justify-center rounded-md bg-blue-500"><Command className="size-3" /></span><span className="text-xs font-semibold">Demo controls</span></div>
-          <p className="text-[11px] leading-4 text-slate-300">Inject safe participant faults from the workflow launcher.</p>
-        </div>
+          <p className="text-[11px] leading-4 text-slate-300">Walk judges through retries, approval, and compensation evidence.</p>
+        </Link>
       </SidebarContent>
       <SidebarFooter className="p-3">
         <button onClick={() => setProfileOpen(value => !value)} className="flex w-full items-center gap-2 rounded-lg p-2 text-left hover:bg-slate-100">
@@ -52,7 +54,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <SidebarInset className="min-h-svh bg-[#F5F7FB]">
       <header className="flex h-[70px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#F9FAFC]/90 px-4 backdrop-blur-xl sm:px-7">
         <div className="flex items-center gap-3"><SidebarTrigger className="md:hidden" /><div><p className="text-[10px] font-bold tracking-[0.13em] text-slate-400">FLOWGUARD / PRODUCTION</p><p className="mt-0.5 text-sm font-semibold text-slate-700">Human-in-the-loop coordination</p></div></div>
-        <div className="flex items-center gap-2"><div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 sm:flex"><span className="size-1.5 rounded-full bg-emerald-500" />All participants healthy</div><Button variant="ghost" size="icon" className="relative text-slate-500"><Bell className="size-4" /><span className="absolute right-2 top-2 size-1.5 rounded-full bg-amber-400" /></Button><Button variant="ghost" size="icon" className="text-slate-500"><CircleHelp className="size-4" /></Button></div>
+        <div className="flex items-center gap-2"><div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 sm:flex"><span className="size-1.5 rounded-full bg-emerald-500" />All participants healthy</div><Button variant="ghost" size="icon" className="relative text-slate-500"><Bell className="size-4" /><span className="absolute right-2 top-2 size-1.5 rounded-full bg-amber-400" /></Button><Button asChild variant="ghost" size="icon" className="text-slate-500"><Link href="/tour" aria-label="Open judge tour"><CircleHelp className="size-4" /></Link></Button></div>
       </header>
       <div className={cn("flex-1 p-4 sm:p-7", "animate-in fade-in duration-300")}>{children}</div>
     </SidebarInset>

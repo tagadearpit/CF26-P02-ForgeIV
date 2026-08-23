@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
+import { lazy, Suspense } from "react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -13,20 +14,27 @@ import Login from "./pages/Login";
 import NewWorkflow from "./pages/NewWorkflow";
 import Recovery from "./pages/Recovery";
 
+const Analytics = lazy(() => import("./pages/Analytics"));
+const JudgeTour = lazy(() => import("./pages/JudgeTour"));
+
 function Router() {
   const { auth } = useAuth();
   if (!auth) return <Login />;
   return (
+    <Suspense fallback={<div className="flex min-h-svh items-center justify-center bg-slate-50 text-sm font-semibold text-slate-500">Loading FlowGuard workspace…</div>}>
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/new"} component={NewWorkflow} />
       <Route path={"/approvals"} component={Approvals} />
       <Route path={"/recovery"} component={Recovery} />
+      <Route path={"/analytics"} component={Analytics} />
       <Route path={"/architecture"} component={Architecture} />
+      <Route path={"/tour"} component={JudgeTour} />
       <Route path={"/executions/:id"} component={ExecutionDetail} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
+    </Suspense>
   );
 }
 

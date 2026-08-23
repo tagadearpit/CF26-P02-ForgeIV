@@ -28,6 +28,8 @@ The central claim tested by this prototype is:
 
 FlowGuard uses MongoDB for workflow executions, individual step state, approval tasks, pending jobs, idempotency records, and append-only events. A Render Background Worker claims jobs, executes the next participant action, schedules retries, finds approval timeouts, and starts compensation when needed.
 
+The operations console now also includes a **Reliability Analytics** view calculated directly from execution records, a high-signal **Recovery Center** that exposes the last safe state and current operator action, and an interactive **Judge Tour** that guides a reviewer through a retry, human decision, compensation, and outcome-evidence storyline.
+
 | Requirement | FlowGuard mechanism |
 |---|---|
 | Durable execution | MongoDB documents for executions, steps, jobs, and events. |
@@ -127,6 +129,8 @@ ENABLE_IN_PROCESS_WORKER=true PORT=8081 WORKER_POLL_MS=50 pnpm dev:api
 4. Sign in as `manager@flowguard.demo` / `demo123` to approve or reject the request.
 5. Use **Inventory fails once** in the launcher to demonstrate retry.
 6. Reject a request to demonstrate compensation and inspect the recovery evidence.
+7. Open **Reliability analytics** to compare completed, compensated, and manual-exception outcomes.
+8. Open **Judge tour** to rehearse the six-minute evaluation walkthrough with the exact evidence to call out at every screen.
 
 ## Validation / experiments / results
 
