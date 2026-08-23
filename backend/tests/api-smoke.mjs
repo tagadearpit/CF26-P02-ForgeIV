@@ -54,6 +54,9 @@ const updatedProfile = await request("/api/me", { method: "PATCH", body: JSON.st
 if (updatedProfile.name !== "Updated Requester" || updatedProfile.email !== `updated.${registrationEmail}` || !updatedProfile.avatarDataUrl) throw new Error("Profile update was not persisted");
 const clearedAvatar = await request("/api/me", { method: "PATCH", body: JSON.stringify({ name: "Updated Requester", email: `updated.${registrationEmail}`, avatarDataUrl: "" }) }, registeredAuth.token);
 if (clearedAvatar.avatarDataUrl) throw new Error("Profile avatar was not removed");
+const requesterWorkflow = await start(registeredAuth.token, `SMOKE-PROFILE-ACTIVITY-${suffix}`, `smoke-profile-activity-${suffix}`);
+const profileActivity = await request("/api/me/activity", {}, registeredAuth.token);
+if (!profileActivity.some(entry => entry.executionId === requesterWorkflow.id && entry.eventType === "WORKFLOW_STARTED")) throw new Error("Profile activity did not include the requester’s workflow history");
 const duplicateRegistration = await fetch(`${base}/api/auth/register`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ firstName: "New", surname: "Requester", email: `updated.${registrationEmail}`, password: "SecureFlow!42", confirmPassword: "SecureFlow!42" }) });
 if (duplicateRegistration.status !== 409) throw new Error("Duplicate registration was not rejected by the API");
 
@@ -89,7 +92,7 @@ if (!waiting.events.some(event => event.type === "STEP_RETRY_SCHEDULED")) throw 
 
 console.log(JSON.stringify({
   result: "PASS",
-  cases: ["secure registration and login", "profile update and avatar persistence", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
+  cases: ["secure registration and login", "profile update and avatar persistence", "user-scoped profile activity history", "duplicate-email rejection", "rejection compensation", "administrator approval completion", "start idempotency", "controlled retry", "administrator-only recovery mutation", "administrator action audit"],
   compensatedExecution: rejected.id,
   completedExecution: successful.id,
   retriedExecution: retried.id,

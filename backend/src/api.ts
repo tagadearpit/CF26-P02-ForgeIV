@@ -111,6 +111,25 @@ export function createApp(engine: WorkflowEngine, store: WorkflowStore, options:
 
   app.get("/api/me", authenticate, (req: AuthedRequest, res) => res.json({ data: publicUser(req.auth!) }));
 
+  app.get("/api/me/activity", authenticate, async (req: AuthedRequest, res, next) => {
+    try {
+      const ownExecutions = (await store.listExecutions()).filter(execution => execution.requestedBy === req.auth!.id);
+      const activity = (await Promise.all(ownExecutions.map(async execution => {
+        const events = await store.listEvents(execution.id);
+        return events.map(event => ({
+          id: event.id,
+          executionId: execution.id,
+          businessKey: execution.businessKey,
+          eventType: event.type,
+          stepKey: event.stepKey,
+          status: execution.status,
+          createdAt: event.createdAt,
+        }));
+      }))).flat().sort((left, right) => right.createdAt.localeCompare(left.createdAt)).slice(0, 30);
+      return res.json({ data: activity });
+    } catch (error) { next(error); }
+  });
+
   app.patch("/api/me", authenticate, async (req: AuthedRequest, res, next) => {
     try {
       const input = profileSchema.parse(req.body);

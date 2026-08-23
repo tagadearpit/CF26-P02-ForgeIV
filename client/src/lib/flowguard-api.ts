@@ -9,6 +9,7 @@ export interface ApprovalTask { id: string; executionId: string; status: "OPEN" 
 export interface WorkflowEvent { id: string; sequence: number; type: string; stepKey?: string; createdAt: string; payload?: Record<string, unknown>; }
 export interface ExecutionDetail { execution: WorkflowExecution; steps: StepExecution[]; events: WorkflowEvent[]; approval?: ApprovalTask; }
 export interface AdminAuditEntry { id: string; executionId: string; businessKey: string; action: "WORKFLOW_CANCELLED" | "MANUAL_RECOVERY_RETRY_REQUESTED"; stepKey?: string; createdAt: string; payload?: Record<string, unknown>; actor: AppUser; }
+export interface ProfileActivity { id: string; executionId: string; businessKey: string; eventType: string; stepKey?: string; status: WorkflowStatus; createdAt: string; }
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
 
@@ -28,6 +29,7 @@ export const flowguardApi = {
   login: (email: string, password: string) => request<{ token: string; user: AppUser }>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
   register: (body: { firstName: string; surname: string; email: string; password: string; confirmPassword: string }) => request<{ message: string }>("/api/auth/register", { method: "POST", body: JSON.stringify(body) }),
   updateProfile: (token: string, body: { name: string; email: string; avatarDataUrl?: string }) => request<AppUser>("/api/me", { method: "PATCH", body: JSON.stringify(body) }, token),
+  profileActivity: (token: string) => request<ProfileActivity[]>("/api/me/activity", {}, token),
   dashboard: (token: string) => request<{ counts: Record<string, number>; recentExecutions: WorkflowExecution[]; openApprovals: ApprovalTask[] }>("/api/dashboard", {}, token),
   executions: (token: string) => request<WorkflowExecution[]>("/api/executions", {}, token),
   adminAudit: (token: string) => request<AdminAuditEntry[]>("/api/audit/admin-actions", {}, token),
