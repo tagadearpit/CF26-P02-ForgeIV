@@ -16,7 +16,7 @@ from pptx.util import Inches, Pt
 
 ROOT = Path("/home/ubuntu")
 ASSETS = ROOT / "webdev-static-assets"
-OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v2.pptx"
+OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v3.pptx"
 
 NAVY = "0B1730"
 INK = "17223B"
@@ -131,23 +131,24 @@ def panel(slide, x, y, w, h, accent=BLUE, fill=WHITE):
 
 
 def cover(slide):
-    brand_header(slide, 0, "FLOWGUARD")
-    text(slide, 0.66, 1.28, 5.50, 0.16, "P-02  •  DISTRIBUTED TRANSACTION COORDINATOR", size=8.2, fill=BLUE, bold=True)
-    text(slide, 0.66, 1.62, 5.70, 1.50, "Human workflows\nneed durable state.", size=36, fill=INK, bold=True, spacing=0.93)
-    text(slide, 0.66, 3.34, 5.58, 0.54, "FlowGuard coordinates business actions, human approvals, safe retries, and compensation without losing the audit trail.", size=14.2, fill=MUTED, spacing=1.12)
-
-    rect(slide, 0.66, 4.25, 5.72, 1.76, fill=PALE_BLUE, line=None, rounded=True)
-    text(slide, 0.93, 4.52, 2.30, 0.18, "TEAM", size=8, fill=BLUE, bold=True)
-    text(slide, 0.92, 4.77, 4.80, 0.34, "FORGEVI", size=25, fill=INK, bold=True)
-    text(slide, 0.95, 5.28, 5.00, 0.48, "Aditya Devhare — Product Presenter & Team Leader\nArpit Tagade — Backend Developer  •  Rohan Kodane — Tester\nAtharva Andhare — Frontend Developer", size=9.4, fill=INK, spacing=1.10)
-
-    rect(slide, 6.82, 1.25, 5.82, 3.66, fill=NAVY, line=None, rounded=True)
-    picture(slide, "flowguard-product-hero.png", 6.84, 1.27, 5.78, 3.62)
-    rect(slide, 6.84, 4.28, 5.78, 0.61, fill=NAVY, line=None, rounded=False)
-    text(slide, 7.13, 4.48, 5.18, 0.16, "DECISION DUE  •  HUMAN CONTROL RETAINED", size=9.0, fill=WHITE, bold=True)
-    panel(slide, 6.84, 5.23, 5.78, 0.80, accent=TEAL, fill=OFF_WHITE)
-    text(slide, 7.08, 5.47, 5.26, 0.14, "Technical claim", size=8.0, fill=TEAL, bold=True)
-    text(slide, 7.08, 5.68, 5.26, 0.16, "Persisted state makes delayed human decisions recoverable.", size=10.1, fill=INK, bold=True)
+    rect(slide, 0, 0, 13.333, 3.18, fill="F5F1E9")
+    text(slide, 0.62, 0.15, 4.50, 1.08, "CODE", size=55, fill="111111", bold=True, font="Georgia", spacing=0.88)
+    text(slide, 0.62, 1.28, 4.90, 1.08, "FORGE", size=55, fill="111111", bold=True, font="Georgia", spacing=0.88)
+    logo = ASSETS / "flowguard-mark.png"
+    if logo.exists():
+        slide.shapes.add_picture(str(logo), Inches(10.10), Inches(0.43), height=Inches(0.38))
+    text(slide, 10.58, 0.48, 1.70, 0.15, "FLOWGUARD", size=10.5, fill=INK, bold=True)
+    text(slide, 10.58, 0.67, 1.70, 0.12, "FORGEVI", size=6.5, fill=MUTED, bold=True)
+    rule(slide, 0, 3.18, 13.333, fill=WHITE, height=0.02)
+    text(slide, 0.66, 3.42, 3.05, 0.20, "Team Name:", size=13.5, fill=MUTED)
+    text(slide, 0.66, 3.73, 4.55, 0.40, "ForgeVI", size=27, fill=INK, bold=True)
+    text(slide, 7.26, 3.42, 2.65, 0.20, "Problem Code:", size=13.5, fill=MUTED)
+    text(slide, 7.26, 3.73, 3.70, 0.33, "P-02", size=23, fill=INK, bold=True)
+    text(slide, 0.66, 4.42, 4.05, 0.20, "Problem Statement Title:", size=13.5, fill=MUTED)
+    text(slide, 0.66, 4.73, 11.76, 0.64, "Distributed Transaction Coordinator for Human Workflows", size=22, fill=INK, bold=True, spacing=1.02)
+    text(slide, 0.66, 5.60, 2.35, 0.20, "Team Members:", size=13.5, fill=MUTED)
+    text(slide, 0.66, 5.92, 11.42, 0.50, "Aditya Devhare — Product Presenter & Team Leader  •  Arpit Tagade — Backend Developer\nRohan Kodane — Tester  •  Atharva Andhare — Frontend Developer", size=11.4, fill=INK, spacing=1.06)
+    text(slide, 0.66, 6.68, 11.55, 0.16, "FlowGuard retains human control while making every business hand-off durable, recoverable, and auditable.", size=9.8, fill=BLUE, bold=True)
     footer(slide, 1)
 
 
@@ -269,9 +270,9 @@ def impact(slide):
     text(slide, 0.93, 4.74, 5.34, 0.22, "Approval completion • compensation • idempotency • audit trail", size=11.2, fill=INK, bold=True)
     text(slide, 0.93, 5.11, 5.34, 0.15, "A fresh live workflow reached an OPEN approval task before expiry.", size=9.0, fill=MUTED)
     rect(slide, 7.07, 2.60, 2.45, 2.90, fill=NAVY, line=None, rounded=True)
-    picture(slide, "flowguard-human-approval.png", 7.09, 2.62, 2.41, 2.86)
+    picture(slide, "flowguard-approval-evidence-v2.png", 7.09, 2.62, 2.41, 2.86)
     rect(slide, 9.73, 2.60, 2.45, 2.90, fill=NAVY, line=None, rounded=True)
-    picture(slide, "flowguard-safe-recovery.png", 9.75, 2.62, 2.41, 2.86)
+    picture(slide, "flowguard-recovery-evidence-v2.png", 9.75, 2.62, 2.41, 2.86)
     text(slide, 0.66, 5.90, 11.50, 0.22, "REAL-WORLD VALUE  •  Procurement, fulfilment, claims, and operations retain human judgment without losing process continuity.", size=10.3, fill=INK, bold=True, align=PP_ALIGN.CENTER)
     footer(slide, 7)
 

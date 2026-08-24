@@ -199,6 +199,12 @@
 - [x] Rebuild every affected slide with collision-safe spacing and a ForgeVI name treatment larger than the team-member names.
 - [x] Verify the revised eight-slide deck, export the corrected PowerPoint, and share its replacement download link.
 
+## Judge Deck Cover and Impact-Visual Revision
+
+- [x] Analyze the newly supplied CodeForge PPT cover template and map its first-slide treatment to FlowGuard.
+- [x] Preserve slides 2–6 and 8, rebuild only slide 1, and replace the slide-7 website-reused images with distinct presentation-specific visuals.
+- [x] Validate the revised deck, import the editable Canva version, and export the replacement PowerPoint.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
