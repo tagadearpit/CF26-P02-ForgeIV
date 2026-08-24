@@ -22,7 +22,6 @@ FlowGuard coordinates a purchase request across independent systems—CRM, inven
 Modern workflows cross systems that do not share one database or respond at the same speed. A normal request-response application can lose progress when a participant fails, a network response is uncertain, a manager takes minutes to approve, or a duplicate request arrives.
 
 FlowGuard provides an **orchestrated Saga** for a focused purchase-request scenario:
-
 ```text
 Create CRM order → Reserve inventory → Authorize payment → Manager approval
                                                          ↓
