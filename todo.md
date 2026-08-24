@@ -193,6 +193,12 @@
 - [x] Update the README with Aditya Devhare as Product Presenter and the confirmed ForgeVI team roles.
 - [x] Create and review a judge-focused FlowGuard presentation in Canva using the approved narrative and template.
 
+## Judge Presentation Layout Repair
+
+- [x] Audit all eight imported Canva slides for text or image overlap, clipping, and unreadable hierarchy.
+- [x] Rebuild every affected slide with collision-safe spacing and a ForgeVI name treatment larger than the team-member names.
+- [x] Verify the revised eight-slide deck, export the corrected PowerPoint, and share its replacement download link.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
