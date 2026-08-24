@@ -29,5 +29,4 @@ async function startServer() {
     console.log(`Server running on http://localhost:${port}/`);
   });
 }
-
 startServer().catch(console.error);
