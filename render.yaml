@@ -13,7 +13,7 @@ services:
       - key: MONGODB_DATABASE
         value: flowguard
       - key: APPROVAL_TIMEOUT_SECONDS
-        value: "60"
+        value: "300"
       - key: WORKER_POLL_MS
         value: "1500"
       - key: ENABLE_IN_PROCESS_WORKER
@@ -39,7 +39,7 @@ services:
       - key: MONGODB_DATABASE
         value: flowguard
       - key: APPROVAL_TIMEOUT_SECONDS
-        value: "60"
+        value: "300"
       - key: WORKER_POLL_MS
         value: "1500"
       - key: MAX_RETRY_ATTEMPTS

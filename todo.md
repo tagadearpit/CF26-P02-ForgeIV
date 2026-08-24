@@ -176,6 +176,11 @@
 
 - [x] Review Render API startup and worker-cycle logs for the still-queued production workflows through the connected browser session.
 
+## Live Approval Window Repair
+
+- [x] Increase the production approval window from the unsuitable 60-second demo value to a usable interval.
+- [ ] Verify a fresh production workflow reaches the Approval Inbox while its approval task is still open.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.

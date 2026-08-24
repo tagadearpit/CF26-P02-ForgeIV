@@ -68,7 +68,7 @@ Add the following variables to **both** the API and worker services unless expli
 | `MONGODB_URI` | Yes | Yes | Atlas connection string. Secret. |
 | `MONGODB_DATABASE` | Yes | Yes | `flowguard` |
 | `JWT_SECRET` | Yes | Yes | One long random secret; use **the exact same value** in both services. |
-| `APPROVAL_TIMEOUT_SECONDS` | Yes | Yes | `60` for a quick live demo. |
+| `APPROVAL_TIMEOUT_SECONDS` | Yes | Yes | `300` for a five-minute human approval window. |
 | `WORKER_POLL_MS` | Yes | Yes | `1500` |
 | `ENABLE_IN_PROCESS_WORKER` | Yes | No | Set `true`. The API defaults to `true`; set it to `false` only after a separate worker has been verified. |
 | `MAX_RETRY_ATTEMPTS` | Yes | Yes | `3` |

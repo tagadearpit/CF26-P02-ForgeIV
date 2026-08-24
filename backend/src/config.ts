@@ -7,7 +7,7 @@ export const config = {
   mongoDatabase: process.env.MONGODB_DATABASE ?? "flowguard",
   jwtSecret: process.env.JWT_SECRET ?? "flowguard-local-development-secret",
   frontendUrl: process.env.FRONTEND_URL ?? "http://localhost:3000",
-  approvalTimeoutSeconds: Number(process.env.APPROVAL_TIMEOUT_SECONDS ?? 60),
+  approvalTimeoutSeconds: Number(process.env.APPROVAL_TIMEOUT_SECONDS ?? 300),
   workerPollMs: Number(process.env.WORKER_POLL_MS ?? 1500),
   maxRetryAttempts: Number(process.env.MAX_RETRY_ATTEMPTS ?? 3),
   // The Mongo-backed job claim lease makes this safe alongside a dedicated worker.

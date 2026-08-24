@@ -22,6 +22,7 @@ FlowGuard coordinates a purchase request across independent systems—CRM, inven
 Modern workflows cross systems that do not share one database or respond at the same speed. A normal request-response application can lose progress when a participant fails, a network response is uncertain, a manager takes minutes to approve, or a duplicate request arrives.
 
 FlowGuard provides an **orchestrated Saga** for a focused purchase-request scenario:
+
 ```text
 Create CRM order → Reserve inventory → Authorize payment → Manager approval
                                                          ↓
@@ -139,7 +140,7 @@ Configure process variables in your terminal, local secret manager, or deploymen
 | `MONGODB_DATABASE` | No | Defaults to `flowguard`. |
 | `JWT_SECRET` | Production | JWT signing secret. |
 | `FRONTEND_URL` | Production | Exact Vercel frontend origin for CORS. |
-| `APPROVAL_TIMEOUT_SECONDS` | No | Defaults to `60`. |
+| `APPROVAL_TIMEOUT_SECONDS` | No | Defaults to `300` seconds (five minutes). |
 | `WORKER_POLL_MS` | No | Defaults to `1500`. |
 | `ENABLE_IN_PROCESS_WORKER` | Render API | Set to `true` so the API continues workflows even if the separate worker is unavailable. The code defaults to enabled; set `false` only after separately verifying a worker service. |
 | `MAX_RETRY_ATTEMPTS` | No | Defaults to `3`. |
