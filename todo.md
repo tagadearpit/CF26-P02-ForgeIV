@@ -148,3 +148,10 @@
 - [x] Create a public FlowGuard product page at `/` with product-relevant imagery, benefits, real-world value, and clear calls to action.
 - [x] Move sign-in to `/login`, including normal Get Started and demo-prefilled Get a Demo entry paths.
 - [x] Validate public/authenticated routing, product images, build, checkpoint, and GitHub synchronization.
+
+## Fresh Full-Stack Verification Audit
+
+- [x] Inventory repository code, scripts, environment contracts, route configuration, and current deployment state.
+- [x] Run clean frontend/backend type checks, builds, unit tests, API smoke tests, and static configuration checks.
+- [ ] Verify the critical browser and live deployment journeys, then repair confirmed defects and re-run affected suites.
+- [ ] Record the final audit evidence, remaining risks, checkpoint, and GitHub synchronization.

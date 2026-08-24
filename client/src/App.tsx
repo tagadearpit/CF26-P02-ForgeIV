@@ -38,6 +38,7 @@ function Router() {
       <Route path={"/architecture"} component={Architecture} />
       <Route path={"/about"} component={About} />
       <Route path={"/register"} component={Register} />
+      <Route path={"/login"} component={Login} />
       <Route path={"/settings/profile"} component={ProfileSettings} />
       <Route path={"/tour"} component={JudgeTour} />
       <Route path={"/executions/:id"} component={ExecutionDetail} />
