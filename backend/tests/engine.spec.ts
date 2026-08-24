@@ -3,7 +3,6 @@ import { WorkflowEngine } from "../src/engine.js";
 import { MemoryStore } from "../src/store.js";
 import { seedDemoUsers } from "../src/seed.js";
 import { processOneCycle } from "../src/worker-runner.js";
-
 async function drain(engine: WorkflowEngine, store: MemoryStore, cycles = 20) {
   for (let index = 0; index < cycles; index += 1) {
     const result = await processOneCycle(engine, store, "test_worker");
