@@ -37,7 +37,7 @@ The central claim tested by this prototype is:
 
 > A persisted MongoDB job ledger, atomic worker lease, and participant idempotency record can make a multi-step business workflow recoverable after expected partial failures and human delays.
 
-FlowGuard uses MongoDB for workflow executions, individual step state, approval tasks, pending jobs, idempotency records, and append-only events. A Render Background Worker claims jobs, executes the next participant action, schedules retries, finds approval timeouts, and starts compensation when needed.
+FlowGuard uses MongoDB for workflow executions, individual step state, approval tasks, pending jobs, idempotency records, and append-only events. The Render API includes a lease-safe in-process worker fallback, while a separate Render Background Worker can add resilience and throughput. Workers claim jobs, execute the next participant action, schedule retries, find approval timeouts, and start compensation when needed.
 
 ### Evaluation evidence at a glance
 
@@ -78,17 +78,16 @@ Render Background Worker (processing, retries, timeout scan, compensation)
 
 The detailed architecture is in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
-```mermaid
-flowchart LR
-  UI[React operations console] -->|HTTPS and JWT| API[Express command and evidence API]
-  API --> DB[(MongoDB Atlas durable records)]
-  Worker[Background worker] -->|atomic job claim| DB
-  Worker --> CRM[CRM adapter]
-  Worker --> Inventory[Inventory adapter]
-  Worker --> Payment[Payment adapter]
-  Worker --> Approval[Durable human approval]
-  Worker --> Events[Append-only workflow events]
-  Events --> DB
+### Execution path
+
+```text
+React operations console ──HTTPS + JWT──> Express API ──> MongoDB durable records
+                                               │
+                         API in-process worker fallback or Render Background Worker
+                                               │
+        CRM adapter ──> Inventory adapter ──> Payment adapter ──> Human approval
+                                               │
+                                     Append-only workflow events ──> MongoDB
 ```
 
 ## Research and design rationale
@@ -143,15 +142,18 @@ Configure process variables in your terminal, local secret manager, or deploymen
 | `FRONTEND_URL` | Production | Exact Vercel frontend origin for CORS. |
 | `APPROVAL_TIMEOUT_SECONDS` | No | Defaults to `60`. |
 | `WORKER_POLL_MS` | No | Defaults to `1500`. |
+| `ENABLE_IN_PROCESS_WORKER` | Render API | Set to `true` so the API continues workflows even if the separate worker is unavailable. The code defaults to enabled; set `false` only after separately verifying a worker service. |
 | `MAX_RETRY_ATTEMPTS` | No | Defaults to `3`. |
 
-Run the API and worker separately for a real MongoDB local environment:
+Run the API for a real MongoDB local environment. It starts the safe in-process worker by default:
 
 ```bash
-# Terminal A
 cd backend && pnpm dev:api
+```
 
-# Terminal B
+For additional resilience or throughput, start a separate worker in a second terminal. Atomic job leases ensure the API worker and background worker do not process the same job twice:
+
+```bash
 cd backend && pnpm dev:worker
 ```
 
@@ -201,7 +203,7 @@ The implemented scope is one predefined purchase-request workflow. Generic workf
 
 ## ForgeVI team
 
-> **Team leader:** Aditya Devhare
+> **Team leader:** Aditya Sam
 
 | Member | Team role |
 |---|---|
