@@ -170,7 +170,7 @@
 
 - [x] Confirm why production workflows remain at `create order` and inspect the deployed worker contract.
 - [x] Repair the confirmed execution or worker deployment cause without weakening workflow safety.
-- [ ] Verify a workflow reaches the approval inbox and record the operational repair.
+- [x] Verify a workflow reaches the approval inbox and record the operational repair.
 
 ## Live Worker Failure Investigation
 
@@ -179,7 +179,7 @@
 ## Live Approval Window Repair
 
 - [x] Increase the production approval window from the unsuitable 60-second demo value to a usable interval.
-- [ ] Verify a fresh production workflow reaches the Approval Inbox while its approval task is still open.
+- [x] Verify a fresh production workflow reaches the Approval Inbox while its approval task is still open.
 
 ## README Diagram Compatibility Repair
 
