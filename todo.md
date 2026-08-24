@@ -181,6 +181,11 @@
 - [x] Increase the production approval window from the unsuitable 60-second demo value to a usable interval.
 - [x] Verify a fresh production workflow reaches the Approval Inbox while its approval task is still open.
 
+## Logout Blank-Screen Repair
+
+- [x] Reproduce the demo-account logout failure and trace session clearing plus route selection.
+- [x] Repair the confirmed logout path and retest on desktop and mobile.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.

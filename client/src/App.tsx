@@ -24,8 +24,7 @@ const JudgeTour = lazy(() => import("./pages/JudgeTour"));
 
 function Router() {
   const { auth } = useAuth();
-  const [location] = useLocation();
-  if (!auth) return <Switch><Route path="/login" component={Login} /><Route path="/register" component={Register} /><Route path="/" component={Product} /></Switch>;
+  if (!auth) return <Switch><Route path="/login" component={Login} /><Route path="/register" component={Register} /><Route path="/" component={Product} /><Route component={Login} /></Switch>;
   return (
     <Suspense fallback={<div className="flex min-h-svh items-center justify-center bg-slate-50 text-sm font-semibold text-slate-500">Loading FlowGuard workspace…</div>}>
     <Switch>

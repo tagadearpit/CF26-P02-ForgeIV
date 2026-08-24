@@ -29,6 +29,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const initials = auth?.user.name?.split(" ").map(part => part[0]).join("") ?? "FG";
   const profileAvatar = auth?.user.avatarDataUrl;
   const isAdministrator = auth?.user.role === "ADMIN";
+  const handleSignOut = () => {
+    signOut();
+    navigate("/login");
+  };
 
   useEffect(() => {
     if (!auth || !isAdministrator) { setPendingRequestCount(0); return; }
@@ -79,7 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <DropdownMenuItem onSelect={() => toggleTheme?.()} className="rounded-lg py-2 text-xs font-semibold text-slate-700 dark:text-slate-200"><Palette className="size-4 text-blue-600 dark:text-blue-300" /><span>Appearance</span><span className="ml-auto text-[10px] font-medium text-slate-400">{theme === "dark" ? "Dark" : "Light"}</span></DropdownMenuItem>
             <DropdownMenuItem onSelect={() => navigate("/tour")} className="rounded-lg py-2 text-xs font-semibold text-slate-700 dark:text-slate-200"><CircleHelp className="size-4 text-slate-400" />Open judge tour</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={signOut} variant="destructive" className="rounded-lg py-2 text-xs font-semibold"><LogOut className="size-4" />Sign out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleSignOut} variant="destructive" className="rounded-lg py-2 text-xs font-semibold"><LogOut className="size-4" />Sign out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
