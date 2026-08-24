@@ -1,6 +1,6 @@
 # FlowGuard Design Exploration
 
-## Three possible directions
+##Three possible directions
 
 ### 1. Calm Operations Console
 **Very Brief Intro:** A composed, trustworthy workspace inspired by mission-control software and financial operations teams. It makes risk, ownership, and next actions easy to understand without looking dramatic or decorative.
