@@ -186,6 +186,13 @@
 - [x] Reproduce the demo-account logout failure and trace session clearing plus route selection.
 - [x] Repair the confirmed logout path and retest on desktop and mobile.
 
+## Hackathon Judge Presentation
+
+- [x] Analyze the supplied CodeForge PPT template and identify its slide structure and visual language.
+- [x] Extract the supplied evaluation framework and map its judging criteria to the eight-slide template.
+- [x] Update the README with Aditya Devhare as Product Presenter and the confirmed ForgeVI team roles.
+- [x] Create and review a judge-focused FlowGuard presentation in Canva using the approved narrative and template.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
