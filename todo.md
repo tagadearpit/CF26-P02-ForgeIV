@@ -142,3 +142,9 @@
 
 - [x] Add backend-only Vitest configuration and apply the five confirmed targeted backend fixes.
 - [x] Verify clean backend type checking, six Vitest tests, behavioral parity, checkpoint, and GitHub synchronization.
+
+## Public Product Page and Authentication Entry
+
+- [x] Create a public FlowGuard product page at `/` with product-relevant imagery, benefits, real-world value, and clear calls to action.
+- [x] Move sign-in to `/login`, including normal Get Started and demo-prefilled Get a Demo entry paths.
+- [x] Validate public/authenticated routing, product images, build, checkpoint, and GitHub synchronization.

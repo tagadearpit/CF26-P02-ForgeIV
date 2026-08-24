@@ -76,3 +76,6 @@ The mark is a forward-moving, interlocked path made of three rounded segments: r
 - Primary actions describe the operational consequence of proceeding rather than using generic entry language.
 - Abstract imagery is paired with concrete coordination cues such as a business key, owner, event status, and decision deadline.
 - Motion is limited to route orientation, live-system health, contextual menus, and tactile confirmation. It uses short opacity-and-transform transitions, never decorative loops; all nonessential movement yields to reduced-motion preferences.
+- Public product pages use the same operational workbench grammar as the console: request, decision, recovery, owner, deadline, and audit evidence are visible rather than hidden behind generic benefit marketing.
+- The workflow pulse rail recurs across public, authentication, and product explanation surfaces as FlowGuard’s signature request-to-decision-to-recovery motif.
+- Product-page calls to action retain clear labels while pairing them with the operational consequence of entering a decision workspace or reviewing prepared workflow evidence.

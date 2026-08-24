@@ -14,6 +14,7 @@ import ExecutionDetail from "./pages/ExecutionDetail";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NewWorkflow from "./pages/NewWorkflow";
+import Product from "./pages/Product";
 import ProfileSettings from "./pages/ProfileSettings";
 import Recovery from "./pages/Recovery";
 import Register from "./pages/Register";
@@ -24,11 +25,12 @@ const JudgeTour = lazy(() => import("./pages/JudgeTour"));
 function Router() {
   const { auth } = useAuth();
   const [location] = useLocation();
-  if (!auth) return location === "/register" ? <Register /> : <Login />;
+  if (!auth) return <Switch><Route path="/login" component={Login} /><Route path="/register" component={Register} /><Route path="/" component={Product} /></Switch>;
   return (
     <Suspense fallback={<div className="flex min-h-svh items-center justify-center bg-slate-50 text-sm font-semibold text-slate-500">Loading FlowGuard workspace…</div>}>
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={Product} />
+      <Route path={"/workspace"} component={Home} />
       <Route path={"/new"} component={NewWorkflow} />
       <Route path={"/approvals"} component={Approvals} />
       <Route path={"/recovery"} component={Recovery} />
