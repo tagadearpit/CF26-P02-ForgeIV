@@ -24,7 +24,7 @@ Modern workflows cross systems that do not share one database or respond at the 
 FlowGuard provides an **orchestrated Saga** for a focused purchase-request scenario:
 
 ```text
-Create CRM order → Reserve inventory → Authorize payment → Manager approval
+Create CRM order  → Reserve inventory → Authorize payment → Manager approval
                                                          ↓
                                 Capture payment → Create invoice → Notify
 ```
