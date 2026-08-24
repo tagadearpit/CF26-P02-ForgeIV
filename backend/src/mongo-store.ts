@@ -77,7 +77,11 @@ export class MongoStore implements WorkflowStore {
     const result = await this.executions.findOneAndUpdate({ id }, { $set: { ...patch, updatedAt: now() }, $inc: { version: 1 } }, { returnDocument: "after" });
     return cloneDocument(result as unknown as WorkflowExecution | null);
   }
-  async upsertStep(step: StepExecution) { await this.steps.updateOne({ executionId: step.executionId, stepKey: step.stepKey }, { $set: step }, { upsert: true }); }
+  async upsertStep(step: StepExecution) {
+    // MongoDB returns its internal `_id` on reads; it must never be included in a later `$set`.
+    const { _id: _mongoId, ...persistedStep } = step as StepExecution & { _id?: unknown };
+    await this.steps.updateOne({ executionId: step.executionId, stepKey: step.stepKey }, { $set: persistedStep }, { upsert: true });
+  }
   async getStep(executionId: string, stepKey: string) { return cloneDocument(await this.steps.findOne({ executionId, stepKey })); }
   async listSteps(executionId: string) { return (await this.steps.find({ executionId }).sort({ position: 1 }).toArray()).map(item => cloneDocument(item)!); }
   async insertEvent(event: WorkflowEvent) { await this.events.insertOne(event); }

@@ -172,6 +172,10 @@
 - [x] Repair the confirmed execution or worker deployment cause without weakening workflow safety.
 - [ ] Verify a workflow reaches the approval inbox and record the operational repair.
 
+## Live Worker Failure Investigation
+
+- [x] Review Render API startup and worker-cycle logs for the still-queued production workflows through the connected browser session.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
