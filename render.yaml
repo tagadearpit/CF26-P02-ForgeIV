@@ -16,6 +16,8 @@ services:
         value: "60"
       - key: WORKER_POLL_MS
         value: "1500"
+      - key: ENABLE_IN_PROCESS_WORKER
+        value: "true"
       - key: MAX_RETRY_ATTEMPTS
         value: "3"
       - key: MONGODB_URI

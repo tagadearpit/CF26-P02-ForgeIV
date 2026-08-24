@@ -161,3 +161,13 @@
 - [x] Reproduce and identify the broken product-image sources on desktop and mobile routes.
 - [x] Replace or correct only the confirmed broken image references and rendering rules.
 - [x] Recheck desktop and mobile product-page images, production build, checkpoint, and GitHub synchronization.
+
+## Repository and Vercel Release Status Check
+
+- [x] Confirm the latest GitHub revision and matching Vercel production deployment state.
+
+## Production Approval-Path Repair
+
+- [x] Confirm why production workflows remain at `create order` and inspect the deployed worker contract.
+- [x] Repair the confirmed execution or worker deployment cause without weakening workflow safety.
+- [ ] Verify a workflow reaches the approval inbox and record the operational repair.

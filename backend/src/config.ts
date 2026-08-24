@@ -10,7 +10,9 @@ export const config = {
   approvalTimeoutSeconds: Number(process.env.APPROVAL_TIMEOUT_SECONDS ?? 60),
   workerPollMs: Number(process.env.WORKER_POLL_MS ?? 1500),
   maxRetryAttempts: Number(process.env.MAX_RETRY_ATTEMPTS ?? 3),
-  enableInProcessWorker: process.env.ENABLE_IN_PROCESS_WORKER === "true",
+  // The Mongo-backed job claim lease makes this safe alongside a dedicated worker.
+  // Defaulting on prevents an API-only Render deployment from leaving workflows queued forever.
+  enableInProcessWorker: process.env.ENABLE_IN_PROCESS_WORKER !== "false",
   configuredAdmin: {
     email: process.env.FLOWGUARD_ADMIN_EMAIL?.trim().toLowerCase(),
     password: process.env.FLOWGUARD_ADMIN_PASSWORD,

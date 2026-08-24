@@ -28,6 +28,8 @@ For a hackathon demo, configure **Network Access** so Render can reach the datab
 
 Create a Render account and connect this GitHub repository. You can use the included `render.yaml` Blueprint or create the services manually.
 
+The API starts a lease-safe in-process worker by default. This prevents an API-only deployment from leaving new workflows stuck at `create order`. Keep the separate background worker for resilience and throughput; both workers can safely coexist because they atomically lease each queued job before processing it.
+
 ### API service settings
 
 | Setting | Value |
@@ -67,7 +69,8 @@ Add the following variables to **both** the API and worker services unless expli
 | `MONGODB_DATABASE` | Yes | Yes | `flowguard` |
 | `JWT_SECRET` | Yes | Yes | One long random secret; use **the exact same value** in both services. |
 | `APPROVAL_TIMEOUT_SECONDS` | Yes | Yes | `60` for a quick live demo. |
-| `WORKER_POLL_MS` | No | Yes | `1500` |
+| `WORKER_POLL_MS` | Yes | Yes | `1500` |
+| `ENABLE_IN_PROCESS_WORKER` | Yes | No | Set `true`. The API defaults to `true`; set it to `false` only after a separate worker has been verified. |
 | `MAX_RETRY_ATTEMPTS` | Yes | Yes | `3` |
 | `FRONTEND_URL` | Yes | No | Your deployed Vercel URL, e.g. `https://flowguard.vercel.app` |
 | `FLOWGUARD_ADMIN_EMAIL` | Yes | No | Optional second administrator email. Configure with `FLOWGUARD_ADMIN_PASSWORD`. Secret-adjacent identity. |
