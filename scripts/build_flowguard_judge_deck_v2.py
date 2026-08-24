@@ -16,7 +16,7 @@ from pptx.util import Inches, Pt
 
 ROOT = Path("/home/ubuntu")
 ASSETS = ROOT / "webdev-static-assets"
-OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v3.pptx"
+OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v4.pptx"
 
 NAVY = "0B1730"
 INK = "17223B"
@@ -136,9 +136,12 @@ def cover(slide):
     text(slide, 0.62, 1.28, 4.90, 1.08, "FORGE", size=55, fill="111111", bold=True, font="Georgia", spacing=0.88)
     logo = ASSETS / "flowguard-mark.png"
     if logo.exists():
-        slide.shapes.add_picture(str(logo), Inches(10.10), Inches(0.43), height=Inches(0.38))
-    text(slide, 10.58, 0.48, 1.70, 0.15, "FLOWGUARD", size=10.5, fill=INK, bold=True)
-    text(slide, 10.58, 0.67, 1.70, 0.12, "FORGEVI", size=6.5, fill=MUTED, bold=True)
+        slide.shapes.add_picture(str(logo), Inches(8.82), Inches(0.43), height=Inches(0.38))
+    text(slide, 9.30, 0.48, 1.70, 0.15, "FLOWGUARD", size=10.5, fill=INK, bold=True)
+    text(slide, 9.30, 0.67, 1.70, 0.12, "FORGEVI", size=6.5, fill=MUTED, bold=True)
+    college_logo = ASSETS / "ghraisoni-skilltech-nagpur-logo.png"
+    if college_logo.exists():
+        slide.shapes.add_picture(str(college_logo), Inches(11.30), Inches(0.22), Inches(1.55), Inches(0.81))
     rule(slide, 0, 3.18, 13.333, fill=WHITE, height=0.02)
     text(slide, 0.66, 3.42, 3.05, 0.20, "Team Name:", size=13.5, fill=MUTED)
     text(slide, 0.66, 3.73, 4.55, 0.40, "ForgeVI", size=27, fill=INK, bold=True)

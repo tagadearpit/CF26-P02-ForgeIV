@@ -205,6 +205,11 @@
 - [x] Preserve slides 2–6 and 8, rebuild only slide 1, and replace the slide-7 website-reused images with distinct presentation-specific visuals.
 - [x] Validate the revised deck, import the editable Canva version, and export the replacement PowerPoint.
 
+## College Logo Addition to Approved Cover
+
+- [x] Place the supplied GHRaSoni Skilltech University, Nagpur logo in the top-right of slide 1 only.
+- [x] Verify the cover, create the updated editable Canva deck, and export the replacement PowerPoint without changing other slide content.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
