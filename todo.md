@@ -153,5 +153,5 @@
 
 - [x] Inventory repository code, scripts, environment contracts, route configuration, and current deployment state.
 - [x] Run clean frontend/backend type checks, builds, unit tests, API smoke tests, and static configuration checks.
-- [ ] Verify the critical browser and live deployment journeys, then repair confirmed defects and re-run affected suites.
-- [ ] Record the final audit evidence, remaining risks, checkpoint, and GitHub synchronization.
+- [x] Verify the critical browser and live deployment journeys, then repair confirmed defects and re-run affected suites.
+- [x] Record the final audit evidence, remaining risks, checkpoint, and GitHub synchronization.
