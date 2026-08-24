@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const productVisuals = {
-  hero: "/manus-storage/flowguard-product-hero_ce68e6b2.png",
-  approval: "/manus-storage/flowguard-human-approval_ce4797f2.png",
-  recovery: "/manus-storage/flowguard-safe-recovery_a7144c85.png",
+  hero: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663889343004/ylvMjedTRTWKhKyq.png",
+  approval: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663889343004/gInYbjDzTcsBZTQh.png",
+  recovery: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663889343004/mlnCZLcVOKclaqDK.png",
 };
 
 const benefits = [

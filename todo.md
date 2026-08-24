@@ -155,3 +155,9 @@
 - [x] Run clean frontend/backend type checks, builds, unit tests, API smoke tests, and static configuration checks.
 - [x] Verify the critical browser and live deployment journeys, then repair confirmed defects and re-run affected suites.
 - [x] Record the final audit evidence, remaining risks, checkpoint, and GitHub synchronization.
+
+## Responsive Product Image Repair
+
+- [x] Reproduce and identify the broken product-image sources on desktop and mobile routes.
+- [x] Replace or correct only the confirmed broken image references and rendering rules.
+- [x] Recheck desktop and mobile product-page images, production build, checkpoint, and GitHub synchronization.
