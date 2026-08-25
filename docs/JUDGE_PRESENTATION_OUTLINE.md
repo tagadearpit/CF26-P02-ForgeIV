@@ -6,7 +6,7 @@
 
 **P-02 — Distributed Transaction Coordinator for Human Workflows**
 
-ForgeVI
+ForgeIV
 
 Aditya Devhare — Product Presenter & Team Leader
 Arpit Tagade — Backend Developer
@@ -105,7 +105,7 @@ CRM / Inventory / Payment / Invoice / Notification adapters
 
 **Prototype boundary:** one predefined purchase workflow with deterministic adapters; no real settlement, generic workflow builder, or multi-stage voting claim.
 
-**AI-assistance disclosure:** AI assisted design exploration, code scaffolding, debugging, documentation, and test generation. ForgeVI remains responsible for correctness, evidence, and technical defense.
+**AI-assistance disclosure:** AI assisted design exploration, code scaffolding, debugging, documentation, and test generation. ForgeIV remains responsible for correctness, evidence, and technical defense.
 
 ## References
 

@@ -16,7 +16,7 @@ from pptx.util import Inches, Pt
 
 ROOT = Path("/home/ubuntu")
 ASSETS = ROOT / "webdev-static-assets"
-OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v4.pptx"
+OUTPUT = ASSETS / "FlowGuard_CodeForge_Judge_Presentation_v5.pptx"
 
 NAVY = "0B1730"
 INK = "17223B"
@@ -105,7 +105,7 @@ def brand_header(slide, page, section):
     if logo.exists():
         slide.shapes.add_picture(str(logo), Inches(0.62), Inches(0.39), height=Inches(0.30))
     text(slide, 1.00, 0.42, 1.50, 0.16, "FLOWGUARD", size=10, fill=INK, bold=True)
-    text(slide, 1.00, 0.59, 1.50, 0.12, "FORGEVI", size=6.4, fill=MUTED, bold=True)
+    text(slide, 1.00, 0.59, 1.50, 0.12, "FORGEIV", size=6.4, fill=MUTED, bold=True)
     text(slide, 9.40, 0.42, 3.25, 0.14, "CODEFORGE 2026  •  JUDGE DECK", size=7.2, fill=MUTED, bold=True, align=PP_ALIGN.RIGHT)
     rule(slide, 0.62, 0.91, 12.10, fill=LINE, height=0.012)
     text(slide, 0.64, 1.08, 2.00, 0.16, f"0{page}  /  {section}", size=7.5, fill=BLUE, bold=True)
@@ -121,7 +121,7 @@ def title(slide, page, section, heading, subtitle=None):
 
 def footer(slide, page):
     rule(slide, 0.62, 7.05, 12.10, fill=LINE, height=0.012)
-    text(slide, 0.64, 7.15, 5.0, 0.12, "FORGEVI  •  FLOWGUARD  •  DURABLE HUMAN WORKFLOWS", size=6.4, fill=MUTED, bold=True)
+    text(slide, 0.64, 7.15, 5.0, 0.12, "FORGEIV  •  FLOWGUARD  •  DURABLE HUMAN WORKFLOWS", size=6.4, fill=MUTED, bold=True)
     text(slide, 12.28, 7.14, 0.30, 0.12, str(page), size=7, fill=MUTED, bold=True, align=PP_ALIGN.RIGHT)
 
 
@@ -138,13 +138,13 @@ def cover(slide):
     if logo.exists():
         slide.shapes.add_picture(str(logo), Inches(8.82), Inches(0.43), height=Inches(0.38))
     text(slide, 9.30, 0.48, 1.70, 0.15, "FLOWGUARD", size=10.5, fill=INK, bold=True)
-    text(slide, 9.30, 0.67, 1.70, 0.12, "FORGEVI", size=6.5, fill=MUTED, bold=True)
+    text(slide, 9.30, 0.67, 1.70, 0.12, "FORGEIV", size=6.5, fill=MUTED, bold=True)
     college_logo = ASSETS / "ghraisoni-skilltech-nagpur-logo.png"
     if college_logo.exists():
         slide.shapes.add_picture(str(college_logo), Inches(11.30), Inches(0.22), Inches(1.55), Inches(0.81))
     rule(slide, 0, 3.18, 13.333, fill=WHITE, height=0.02)
     text(slide, 0.66, 3.42, 3.05, 0.20, "Team Name:", size=13.5, fill=MUTED)
-    text(slide, 0.66, 3.73, 4.55, 0.40, "ForgeVI", size=27, fill=INK, bold=True)
+    text(slide, 0.66, 3.73, 4.55, 0.40, "ForgeIV", size=27, fill=INK, bold=True)
     text(slide, 7.26, 3.42, 2.65, 0.20, "Problem Code:", size=13.5, fill=MUTED)
     text(slide, 7.26, 3.73, 3.70, 0.33, "P-02", size=23, fill=INK, bold=True)
     text(slide, 0.66, 4.42, 4.05, 0.20, "Problem Statement Title:", size=13.5, fill=MUTED)
@@ -289,7 +289,7 @@ def defense(slide):
     rect(slide, 8.02, 2.60, 4.16, 3.02, fill=PALE_BLUE, line=None, rounded=True)
     text(slide, 8.34, 2.90, 3.52, 0.14, "PROTOTYPE BOUNDARY", size=7.7, fill=BLUE, bold=True)
     text(slide, 8.34, 3.22, 3.48, 0.50, "One predefined purchase workflow with deterministic adapters.", size=11.4, fill=INK, bold=True, spacing=1.04)
-    text(slide, 8.34, 3.96, 3.46, 0.72, "No claim of real settlement, generic workflow building, or multi-stage voting.\n\nAI assisted design, code scaffolding, debugging, documentation, and testing; ForgeVI owns the evidence and technical defense.", size=8.4, fill=MUTED, spacing=1.06)
+    text(slide, 8.34, 3.96, 3.46, 0.72, "No claim of real settlement, generic workflow building, or multi-stage voting.\n\nAI assisted design, code scaffolding, debugging, documentation, and testing; ForgeIV owns the evidence and technical defense.", size=8.4, fill=MUTED, spacing=1.06)
     rect(slide, 0.66, 5.93, 11.52, 0.48, fill=NAVY, line=None, rounded=True)
     text(slide, 0.95, 6.09, 10.92, 0.15, "Judge demo: requester submits  →  manager decides  →  evidence shows completion, retry, or compensation.", size=9.6, fill=WHITE, bold=True, align=PP_ALIGN.CENTER)
     footer(slide, 8)

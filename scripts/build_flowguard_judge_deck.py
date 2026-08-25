@@ -130,7 +130,7 @@ def add_title(slide, number, title, subtitle=None):
 
 def add_footer(slide, index):
     add_rule(slide, 0.34, 5.30, 9.32, color=LINE, height=0.012)
-    add_text(slide, 0.34, 5.36, 5.5, 0.15, 'FORGEVI  •  CODEFORGE 2026  •  FLOWGUARD', size=6.6, color=MUTED, bold=True)
+    add_text(slide, 0.34, 5.36, 5.5, 0.15, 'FORGEIV  •  CODEFORGE 2026  •  FLOWGUARD', size=6.6, color=MUTED, bold=True)
     add_text(slide, 9.18, 5.34, 0.46, 0.16, str(index), size=7, color=MUTED, bold=True, align=PP_ALIGN.RIGHT)
 
 
@@ -152,7 +152,7 @@ def cover(slide):
     clear_slide_text(slide, keep_codeforge=True)
     add_logo(slide, 5.54, 0.36, 0.30)
     add_text(slide, 5.92, 0.40, 2.0, 0.18, 'FLOWGUARD', size=10, color=INK, bold=True)
-    add_text(slide, 5.92, 0.59, 2.0, 0.13, 'FORGEVI', size=6.5, color=MUTED, bold=True)
+    add_text(slide, 5.92, 0.59, 2.0, 0.13, 'FORGEIV', size=6.5, color=MUTED, bold=True)
     hero = ASSETS / 'flowguard-product-hero.png'
     if hero.exists():
         slide.shapes.add_picture(str(hero), Inches(5.52), Inches(0.93), Inches(4.11), Inches(2.45))
@@ -162,7 +162,7 @@ def cover(slide):
     add_rule(slide, 5.54, 4.20, 1.08, color=BLUE)
     add_text(slide, 5.54, 4.38, 3.80, 0.31, 'A durable coordinator for human-approved business workflows.', size=10.5, color=MUTED)
     add_rich_text(slide, 5.54, 4.82, 3.82, 0.48, [
-        {'text': 'ForgeVI  •  Aditya Devhare  •  Arpit Tagade  •  Rohan Kodane  •  Atharva Andhare', 'size': 7.8, 'color': INK, 'bold': True, 'line_spacing': 1.1}
+        {'text': 'ForgeIV  •  Aditya Devhare  •  Arpit Tagade  •  Rohan Kodane  •  Atharva Andhare', 'size': 7.8, 'color': INK, 'bold': True, 'line_spacing': 1.1}
     ], fill=BLUE_SOFT, line=None)
 
 
@@ -324,7 +324,7 @@ def references(slide):
         {'text': 'PROTOTYPE BOUNDARY', 'size': 8, 'color': BLUE, 'bold': True},
         {'text': 'One predefined purchase workflow with deterministic adapters.', 'size': 11.3, 'color': INK, 'bold': True},
         {'text': 'No claim of real settlement, a generic workflow builder, or multi-stage voting.', 'size': 9.0, 'color': MUTED},
-        {'text': 'AI disclosure: assisted design, code scaffolding, debugging, documentation, and testing. ForgeVI owns all claims and evidence.', 'size': 8.4, 'color': MUTED},
+        {'text': 'AI disclosure: assisted design, code scaffolding, debugging, documentation, and testing. ForgeIV owns all claims and evidence.', 'size': 8.4, 'color': MUTED},
     ], fill=BLUE_SOFT, line=None)
     add_rect(slide, 0.50, 4.45, 8.92, 0.47, fill=NAVY, radius=True)
     add_text(slide, 0.76, 4.57, 8.40, 0.16, 'Judge demo: requester submits  →  manager decides  →  evidence shows completion, retry, or compensation.', size=9.3, color=WHITE, bold=True, align=PP_ALIGN.CENTER)

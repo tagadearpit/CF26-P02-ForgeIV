@@ -210,6 +210,11 @@
 - [x] Place the supplied GHRaSoni Skilltech University, Nagpur logo in the top-right of slide 1 only.
 - [x] Verify the cover, create the updated editable Canva deck, and export the replacement PowerPoint without changing other slide content.
 
+## ForgeIV Team-Name Correction
+
+- [x] Replace the incorrect ForgeVI team identity with ForgeIV in the README and every presentation occurrence.
+- [ ] Verify the corrected presentation, synchronize the README to GitHub, and export the updated Canva PowerPoint.
+
 ## README Diagram Compatibility Repair
 
 - [x] Replace the unsupported README Mermaid diagram with a GitHub-compatible architecture representation.
